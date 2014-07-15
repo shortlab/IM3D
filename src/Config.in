@@ -1,0 +1,174 @@
+#<<<BEGIN CONFIGFILE
+# Configuration file for iran3d
+
+[IonBeam]
+max_no_ions=50000
+ion_Z= 14
+ion_M=28.0
+ion_E0=50000
+ion_vx=0
+ion_vy=0
+ion_vz=1
+ion_distribution=0
+enter_x=20  # ygli
+enter_y=20
+enter_z=-10
+beam_spread=1.5
+
+[Simulation]
+OutputFileBaseName=./output/
+output_format=1
+normalize_output=0
+display_interval=100
+storage_interval=1000
+store_transmitted_ions=1
+store_exiting_recoils=0
+store_exiting_limit=100
+store_energy_deposit=1
+store_ion_paths=0
+store_recoil_cascades=0
+store_path_limit=100
+simulation_type=0
+transport_type=1
+flight_length_type=0
+flight_length_constant=0.3
+scattering_calculation=0
+multiple_collisions=1
+detailed_sputtering=1
+single_ion_sputter_yields=0
+do_not_store_damage=0
+min_energy=5
+seed1=39419293
+seed2=93145294
+
+[Target]
+geometry_type=1
+no_substrate=1
+gen_shape_or_not=1
+straggling_model=3
+MaterialsFileName=Materials.in
+TargetstructureFileName=Structure.in
+
+#<<<BEGIN STRUCTUREFILE
+# Structure definition file for iran3d
+
+[Target]
+cell_count_x=60
+cell_count_y=60
+cell_count_z=20
+cell_size_x=10
+cell_size_y=10
+cell_size_z=5
+sub_surf_z=101
+CompositionFileType=0
+CompositionFileName=testwire.conc.in
+
+#<<<BEGIN MATFILE
+[GaAs]
+ElementCount=2
+Density=4.43e22
+ElementsZ=31,33
+ElementsM=69.72,74.92
+ElementsConc=0.5,0.5
+ElementsDispEnergy=20.0,25.0
+ElementsLattEnergy=3.0,3.0
+ElementsSurfEnergy=2.0,1.2
+IonSurfEnergy=2.0
+
+#<<<BEGIN COMPFILE
+ 1
+  1
+ 100.000 100.000  50.000  50.000
+  0
+  0
+ 2
+  1
+ 300.000 110.000   0.100
+ 300.000  50.000 100.000
+ 250.000 140.000 100.000
+ 350.000 140.000 100.000
+  0
+  0
+ 3
+  1
+ 450.000  50.000   0.000
+ 100.000 100.000 100.000
+   1.000   0.000   0.000
+   0.000   1.000   0.000
+   0.000   0.000   1.000
+ 4
+  1
+  75.000  50.000  40.000
+ -1
+ 100.000 300.000  50.000
+  0
+  0
+  0
+ 5
+  1
+  30.000  80.000
+ -1
+ 300.000 300.000   0.100
+  0
+  0
+  0
+ 6
+  1
+  50.000 100.000
+ -1
+ 500.000 300.000   0.000
+  0
+  0
+  0
+ 7
+  1
+  6
+   4
+  50.000 425.000 100.010
+  50.000 575.000 100.010
+  59.963 575.000   0.000
+  59.963 425.000   0.000
+   4
+  59.963 425.000   0.000
+  59.963 575.000   0.000
+ 144.963 575.000   0.000
+ 144.963 425.000   0.000
+   4
+ 144.963 425.000   0.000
+ 144.963 575.000   0.000
+ 154.926 575.000 100.010
+ 154.926 425.000 100.010
+   4
+  50.000 425.000 100.010
+  50.000 575.000 100.010
+ 154.926 575.000 100.010
+ 154.926 425.000 100.010
+   4
+  50.000 425.000 100.010
+  59.963 425.000   0.000
+ 144.963 425.000   0.000
+ 154.926 425.000 100.010
+   4
+  50.000 575.000 100.010
+  59.963 575.000   0.000
+ 144.963 575.000   0.000
+ 154.926 575.000 100.010
+ 8
+  1
+  50.000 100.000
+ -1
+ 300.000 500.000   0.000
+  0
+  0
+  0
+ 9
+  1
+  20.000  50.000  80.000
+ -1
+ 500.000 500.000   0.000
+  0
+  0
+  0
+ 0
+ 0.0
+

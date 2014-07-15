@@ -1,0 +1,11 @@
+[GaAs]
+ElementCount=2
+Density=4.43e22
+ElementsZ=31,33
+ElementsM=69.72,74.92
+ElementsConc=0.5,0.5
+ElementsDispEnergy=20.0,25.0
+ElementsLattEnergy=3.0,3.0
+ElementsSurfEnergy=2.0,1.2
+IonSurfEnergy=2.0
+

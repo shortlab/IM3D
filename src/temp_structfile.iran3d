@@ -1,0 +1,13 @@
+# Structure definition file for iran3d
+
+[Target]
+cell_count_x=60
+cell_count_y=60
+cell_count_z=20
+cell_size_x=10
+cell_size_y=10
+cell_size_z=5
+sub_surf_z=101
+CompositionFileType=0
+CompositionFileName=testwire.conc.in
+

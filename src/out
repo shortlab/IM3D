@@ -1,0 +1,288 @@
+************************************************************************
+IRAN3D: Ion IRadiation of Nanostructured materials
+        -- a 3D parallel Monte Carlo simulation code
+
+IRAN3D Version 1.0.0, Apr. 29th, 2014
+ -- 
+by Yonggang Li (Y.G. Li), 2014, ygli@theory.issp.ac.cn & ygli@mit.edu;
+Institute of Solid Status of Physics, Chinese Academy of Sciences;
+& Nuclear Science and Engineering, Massachusetts Institute of Technology.
+
+Refers to:
+  H.M. Li, H.Y. Wang, Y.G. Li & Z.J. Ding*'s CSG/FETM geometry methods;
+& C. Borschel's OSS 'iradina' and F. Schiettekatte's OSS 'corteo'.
+
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it under
+certain conditions, see LICENCE for details.
+************************************************************************
+
+Seed in node 2 is: 39419295	93145296
+Seed in node 1 is: 39419294	93145295
+Seed in node 3 is: 39419296	93145297
+Seed in node 0 is: 39419293	93145294
+Configuration read from temp_configfile.iran3d.
+Corteo scattering matrix loaded.
+Lists of random numbers generated.
+Chu's straggling data read.
+Invsere Erf list read.
+Invsere Erf list randomized.
+Prepare scattering matrices for ion on target collisions... finished
+Prepare scattering matrices for recoil on target collisions...i: 0; my_shape:  1; is_full:   1
+i: 1; my_shape:  2; is_full:   1
+i: 2; my_shape:  3; is_full:   1
+i: 3; my_shape:  4; is_full:   1
+i: 4; my_shape:  5; is_full:   1
+i: 5; my_shape:  6; is_full:   1
+i: 6; my_shape:  7; is_full:   1
+i: 7; my_shape:  8; is_full:   1
+i: 8; my_shape:  9; is_full:   1
+z0_max_csg: 101 (nm), must larger than the max depth of goemetry structure!
+i: 0; my_shape:  1; is_full:   1
+i: 1; my_shape:  2; is_full:   1
+i: 2; my_shape:  3; is_full:   1
+i: 3; my_shape:  4; is_full:   1
+i: 4; my_shape:  5; is_full:   1
+i: 5; my_shape:  6; is_full:   1
+i: 6; my_shape:  7; is_full:   1
+i: 7; my_shape:  8; is_full:   1
+i: 8; my_shape:  9; is_full:   1
+z0_max_csg: 101 (nm), must larger than the max depth of goemetry structure!
+ finished
+Materials read from temp_matfile.iran3d.
+Initializing target.
+Target structure definition file: temp_structfile.iran3d
+
+Target size is: 
+x: 60 cells, 10 nm per cell, 600 nm in total.
+y: 60 cells, 10 nm per cell, 600 nm in total.
+z: 20 cells, 5 nm per cell, 100 nm in total.
+Total: 72000 cells in 3.6e+07 nm^3.
+----------------------------------------------
+i: 0; my_shape:  1; is_full:   1
+  Solid Sphere:
+    Radius(nm):   50.000
+    Center(nm):  100.000  100.000   50.000
+i: 1; my_shape:  2; is_full:   1
+  Solid Tetrahedrona:
+Vertex(nm):    300.000    110.000      0.100
+               300.000     50.000    100.000
+               250.000    140.000    100.000
+               350.000    140.000    100.000
+i: 2; my_shape:  3; is_full:   1
+  Solid Cuboid:
+     Vertex(nm): 
+    450.000     50.000      0.000 
+Side Length(nm): 
+    100.000    100.000    100.000 
+    Orientation: 
+      1.000      0.000      0.000 
+      0.000      1.000      0.000 
+      0.000      0.000      1.000 
+i: 3; my_shape:  4; is_full:   1
+  Solid Ellipsoid:
+    Semi-axes(nm): 
+      75.000   50.000   40.000
+    Shift(nm):  100.000  300.000   50.000
+i: 4; my_shape:  5; is_full:   1
+  Solid Taper:
+    Vertex Angle(D):   30.000
+         Height(nm):   80.000
+    Shift(nm):  300.000  300.000    0.100
+i: 5; my_shape:  6; is_full:   1
+  Solid Column:
+    Radius(nm):   50.000
+    Height(nm):  100.000
+    Shift(nm):  500.000  300.000    0.000
+i: 6; my_shape:  7; is_full:   1
+  Solid Polyhedron:
+  6
+   4
+  50.000  425.000  100.010
+  50.000  575.000  100.010
+  59.963  575.000    0.000
+  59.963  425.000    0.000
+   4
+  59.963  425.000    0.000
+  59.963  575.000    0.000
+ 144.963  575.000    0.000
+ 144.963  425.000    0.000
+   4
+ 144.963  425.000    0.000
+ 144.963  575.000    0.000
+ 154.926  575.000  100.010
+ 154.926  425.000  100.010
+   4
+  50.000  425.000  100.010
+  50.000  575.000  100.010
+ 154.926  575.000  100.010
+ 154.926  425.000  100.010
+   4
+  50.000  425.000  100.010
+  59.963  425.000    0.000
+ 144.963  425.000    0.000
+ 154.926  425.000  100.010
+   4
+  50.000  575.000  100.010
+  59.963  575.000    0.000
+ 144.963  575.000    0.000
+ 154.926  575.000  100.010
+i: 7; my_shape:  8; is_full:   1
+  Solid Paraboloid:
+    Radius(nm):   50.000
+    Height(nm):  100.000
+    Shift(nm):  300.000  500.000    0.000
+i: 8; my_shape:  9; is_full:   1
+  Solid Hyperboloid:
+    Distance(nm):   20.000
+      Radius(nm):   50.000
+      Height(nm):   80.000
+    Shift(nm):  500.000  500.000    0.000
+z0_max_csg: 101 (nm), must larger than the max depth of goemetry structure!
+----------------------------------------------
+This is the CSG geometry version of iran3d.
+
+Target composition read from temp_compfile.iran3d.
+Target structure read from temp_structfile.iran3d.
+Normalization factor:	1
+
+Starting simulation of irradiation...
+i: 0; my_shape:  1; is_full:   1
+i: 1; my_shape:  2; is_full:   1
+i: 2; my_shape:  3; is_full:   1
+i: 3; my_shape:  4; is_full:   1
+i: 4; my_shape:  5; is_full:   1
+i: 5; my_shape:  6; is_full:   1
+i: 6; my_shape:  7; is_full:   1
+i: 7; my_shape:  8; is_full:   1
+i: 8; my_shape:  9; is_full:   1
+z0_max_csg: 101 (nm), must larger than the max depth of goemetry structure!
+Completed: 0%
+Completed: 0.8%
+Completed: 1.6%
+Completed: 2.4%
+Completed: 3.2%
+Completed: 4%
+Completed: 4.8%
+Completed: 5.6%
+Completed: 6.4%
+Completed: 7.2%
+Completed: 8%
+Completed: 8.8%
+Completed: 9.6%
+Completed: 10.4%
+Completed: 11.2%
+Completed: 12%
+Completed: 12.8%
+Completed: 13.6%
+Completed: 14.4%
+Completed: 15.2%
+Completed: 16%
+Completed: 16.8%
+Completed: 17.6%
+Completed: 18.4%
+Completed: 19.2%
+Completed: 20%
+Completed: 20.8%
+Completed: 21.6%
+Completed: 22.4%
+Completed: 23.2%
+Completed: 24%
+Completed: 24.8%
+Completed: 25.6%
+Completed: 26.4%
+Completed: 27.2%
+Completed: 28%
+Completed: 28.8%
+Completed: 29.6%
+Completed: 30.4%
+Completed: 31.2%
+Completed: 32%
+Completed: 32.8%
+Completed: 33.6%
+Completed: 34.4%
+Completed: 35.2%
+Completed: 36%
+Completed: 36.8%
+Completed: 37.6%
+Completed: 38.4%
+Completed: 39.2%
+Completed: 40%
+Completed: 40.8%
+Completed: 41.6%
+Completed: 42.4%
+Completed: 43.2%
+Completed: 44%
+Completed: 44.8%
+Completed: 45.6%
+Completed: 46.4%
+Completed: 47.2%
+Completed: 48%
+Completed: 48.8%
+Completed: 49.6%
+Completed: 50.4%
+Completed: 51.2%
+Completed: 52%
+Completed: 52.8%
+Completed: 53.6%
+Completed: 54.4%
+Completed: 55.2%
+Completed: 56%
+Completed: 56.8%
+Completed: 57.6%
+Completed: 58.4%
+Completed: 59.2%
+Completed: 60%
+Completed: 60.8%
+Completed: 61.6%
+Completed: 62.4%
+Completed: 63.2%
+Completed: 64%
+Completed: 64.8%
+Completed: 65.6%
+Completed: 66.4%
+Completed: 67.2%
+Completed: 68%
+Completed: 68.8%
+Completed: 69.6%
+Completed: 70.4%
+Completed: 71.2%
+Completed: 72%
+Completed: 72.8%
+Completed: 73.6%
+Completed: 74.4%
+Completed: 75.2%
+Completed: 76%
+Completed: 76.8%
+Completed: 77.6%
+Completed: 78.4%
+Completed: 79.2%
+Completed: 80%
+Completed: 80.8%
+Completed: 81.6%
+Completed: 82.4%
+Completed: 83.2%
+Completed: 84%
+Completed: 84.8%
+Completed: 85.6%
+Completed: 86.4%
+Completed: 87.2%
+Completed: 88%
+Completed: 88.8%
+Completed: 89.6%
+Completed: 90.4%
+Completed: 91.2%
+Completed: 92%
+Completed: 92.8%
+Completed: 93.6%
+Completed: 94.4%
+Completed: 95.2%
+Completed: 96%
+Completed: 96.8%
+Completed: 97.6%
+Completed: 98.4%
+Completed: 99.2%
+Storing final results: ...
+ done.
+
+Run time: 71.000000 seconds.
