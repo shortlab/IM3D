@@ -1,0 +1,63 @@
+==> SRIM-2013.00 This file controls TRIM Calculations.
+Ion: Z1 ,  M1,  Energy (keV), Angle,Number,Bragg Corr,AutoSave Number.
+     1   1.008       40000       0     10000        1      100
+Cascades(1=No;2=Full;3=Sputt;4-5=Ions;6-7=Neutrons), Random Number Seed, Reminders
+                      1                                   0       0
+Diskfiles (0=no,1=yes): Ranges, Backscatt, Transmit, Sputtered, Collisions(1=Ion;2=Ion+Recoils), Special EXYZ.txt file
+                          1       0           0       0               2                               0
+Target material : Number of Elements & Layers
+"H (10) into Top Structure-316SS+Coolant-"      32               5
+PlotType (0-5); Plot Depths: Xmin, Xmax(Ang.) [=0 0 for Viewing Full Target]
+       5                         0           5E+07
+Target Elements:    Z   Mass(amu)
+Atom 1 = C =       6  12.011
+Atom 2 = Mo =      42   95.94
+Atom 3 = Mn =      25  54.938
+Atom 4 = P =      15  30.974
+Atom 5 = S =      16  32.066
+Atom 6 = Si =      14  28.086
+Atom 7 = Cr =      24  51.996
+Atom 8 = Ni =      28   58.69
+Atom 9 = N =       7  14.007
+Atom 10 = Fe =      26  55.847
+Atom 11 = K =      19  39.098
+Atom 12 = N =       7  14.007
+Atom 13 = O =       8  15.999
+Atom 14 = C =       6  12.011
+Atom 15 = Fe =      26  55.847
+Atom 16 = H =       1   1.008
+Atom 17 = N =       7  14.007
+Atom 18 = O =       8  15.999
+Atom 19 = Ti =      22    47.9
+Atom 20 = K =      19  39.098
+Atom 21 = N =       7  14.007
+Atom 22 = O =       8  15.999
+Atom 23 = C =       6  12.011
+Atom 24 = Mo =      42   95.94
+Atom 25 = Mn =      25  54.938
+Atom 26 = P =      15  30.974
+Atom 27 = S =      16  32.066
+Atom 28 = Si =      14  28.086
+Atom 29 = Cr =      24  51.996
+Atom 30 = Ni =      28   58.69
+Atom 31 = N =       7  14.007
+Atom 32 = Fe =      26  55.847
+Layer   Layer Name /               Width Density      C(6)  Mo(42)  Mn(25)   P(15)   S(16)  Si(14)  Cr(24)  Ni(28)    N(7)  Fe(26)   K(19)    N(7)    O(8)    C(6)  Fe(26)    H(1)    N(7)    O(8)  Ti(22)   K(19)    N(7)    O(8)    C(6)  Mo(42)  Mn(25)   P(15)   S(16)  Si(14)  Cr(24)  Ni(28)    N(7)  Fe(26)
+Numb.   Description                (Ang) (g/cm3)    Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich  Stoich
+ 1      "Top Structure-316SS"           10000000  7.99 .000802 .020054 .020054 .000451 .000301  .00752 .160433 .100271 .001003 .689111       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0
+ 2      "Coolant-KNO3"           12500000  2.105       0       0       0       0       0       0       0       0       0       0      .2      .2      .6       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0
+ 3      "Sample-Ti"           5000000  4.51       0       0       0       0       0       0       0       0       0       0       0       0       0 .000806 .002015 .000151 .000302 .001813 .994913       0       0       0       0       0       0       0       0       0       0       0       0       0
+ 4      "Coolant-KNO3"           12500000  2.105       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0      .2      .2      .6       0       0       0       0       0       0       0       0       0       0
+ 5      "Bottom Structure-316SS"           10000000  7.99       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0 .000802 .020054 .020054 .000451 .000301  .00752 .160433 .100271 .001003 .689111
+0  Target layer phases (0=Solid, 1=Gas)
+0 0 0 0 0 
+Target Compound Corrections (Bragg)
+ 1   1   1   1   1  
+Individual target atom displacement energies (eV)
+      28      25      25      25      25      15      25      25      28      25      25      28      28      28      25      10      28      28      25      25      28      28      28      25      25      25      25      15      25      25      28      25
+Individual target atom lattice binding energies (eV)
+       3       3       3       3       3       2       3       3       3       3       3       3       3       3       3       3       3       3       3       3       3       3       3       3       3       3       3       2       3       3       3       3
+Individual target atom surface binding energies (eV)
+    7.41    6.83    2.98    3.27    2.88     4.7    4.12    4.46       2    4.34     .93       2       2    7.41    4.34       2       2       2    4.89     .93       2       2    7.41    6.83    2.98    3.27    2.88     4.7    4.12    4.46       2    4.34
+Stopping Power Version (1=2011, 0=2011)
+ 0 
