@@ -1,4 +1,4 @@
-Iran3D
+IM3D
 ======
 
-Yonggang's 3D Monte Carlo radiation damage code
+A Monte Carlo (MC) code for the simulation of primary radiation damage in arbitrarily complex objects, including nanostructures, under ion irradiation.
