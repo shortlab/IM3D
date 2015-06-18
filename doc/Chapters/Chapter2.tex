@@ -1,0 +1,382 @@
+% Chapter 2
+
+\chapter{Getting Started}  % Main chapter title
+
+\label{Chapter2}  % For referencing the chapter elsewhere, use \ref{Chapter1}
+
+\lhead{Chapter 2. \emph{Getting Started}}  % This is for the header on each page - perhaps a shortened title
+
+%----------------------------------------------------------------------------------------
+
+This section describes how to build and run IM3D.
+
+%----------------------------------------------------------------------------------------
+
+\section{What is in the IM3D Distribution}
+
+When you download IM3D you will need to unzip and untar the downloaded file with the following commands, after placing the file in an appropriate directory.
+
+\quad \textsl{gunzip im3d*.tar.gz}
+
+\quad \textsl{tar xvf im3d*.tar}
+
+This will create an IM3D directory containing two files and several sub-directories:
+
+\begin{itemize}
+
+\item README ~~~~~ Text file, general information;
+
+\item LICENSE ~~~~~ The GNU General Public License (GPL);
+
+\item bin ~~~~~~~~~~~~~~ Executable files;
+
+\item data ~~~~~~~~~~~~~ SRIM databases, input indexing tables, material properties, etc.;
+
+\item doc ~~~~~~~~~~~~~~ User manual;
+
+\item examples ~~~~~~ Tests and examples;
+
+\item lib ~~~~~~~~~~~~~~~ Static libraries used for IM3D code, geometric modules.
+
+\item src ~~~~~~~~~~~~~~~ Source codes;
+
+\item tools ~~~~~~~~~~~~ Useful tools for generating input script, shapes, databases and etc.
+
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+
+\section{Making IM3D}
+
+\subsection{Steps to build an IM3D executable file}
+
+Systems:
+    $Windows$, $Linux$ or $Mac$.
+
+Compiler:
+    Microsoft Visual Studio - $c$ / $mingw32$, $gcc$ and etc.
+
+Libraries \& packages:
+    Standard $C$ library and $MPICH$ / $OpenMP$ package.
+
+
+The src directory contains the plain C source and header files for IM3D. It also contains a makefile file for linux/Mac systems:
+
+\# This makefile can be used to compile im3d.\\
+\# On Linux/UNIX or Mac systems, gcc is recommend for compilation.\\
+\# On Windows system, mingw32 is recommend for compilation.
+
+\#CC = gcc \# serial, linux or Mac\\
+\#CC = mingw32-gcc \# serial, win\\
+CC = mpicc \# mpi, linux or Mac
+
+\#CFLAGS = -O2 -Wall -ansi -pedantic\\
+\#CFLAGS = -O2 -Wall -pedantic\\
+\#CFLAGS = -O1 -Wall\\
+CFLAGS = -O1 -Wall -m32 \# for 64-bit systems, -m32 or -arch i386 must be included\\
+LDFLAGS = -lm -m32 \# for 64-bit systems, -m32 or -arch i386 must be included\\
+\#LIBFLAG = -L. -lstruct\_s \# include static library, serial\\
+LIBFLAG = -L. -lstruct\_m \# include static library, mpi
+
+\# Notes on warning level:\\
+\# Using -Wall and -pedantic will return many warnings, because of non-allowed\\
+\# comment styles in the codes. I recommend using just -Wall.
+
+\# Notes on the compiler optimization options -OX:\\
+\# It is not recommended to use -O2 or -O3. On Linux systems no problems using\\
+\# these options have been observed so far; however, on windows systems porgram\\
+\# crashes and hang-ups did occur when using -O2 or -O3.\\
+\# In windows, the inverse sqr tables will not work with -O2.\\
+\# If unsure, compile all with -O1 only.
+
+im3d \: im3d.o mpimod.o const.o init.o material.o target.o matrix.o index.o magic.o fileio.o cfgwriter.o mshwriter.o bulk.o utils.o random.o\\
+  \$(CC) \$(LDFLAGS) -o iran3d im3d.o mpimod.o const.o init.o material.o target.o matrix.o index.o magic.o fileio.o cfgwriter.o mshwriter.o bulk.o utils.o random.o \$(LIBFLAG)
+
+im3d.o: im3d.h im3d.c
+
+mpimod.o: mpimod.h mpimod.c
+
+const.o: const.h const.c
+
+init.o: init.h init.c
+
+material.o: material.h material.c
+
+target.o: target.h target.c
+
+matrix.o: matrix.h matrix.c
+
+index.o: index.h index.c
+
+magic.o: magic.h magic.c
+
+fileio.o: fileio.h fileio.c
+
+cfgwriter.o: cfgwriter.h cfgwriter.c
+
+mshwriter.o: mshwriter.h mshwriter.c
+
+bulk.o: bulk.h bulk.c
+
+utils.o: utils.h utils.c
+
+random.o: random.h random.c
+
+.c.o :\\
+	\$(CC) -c \$(CFLAGS) \$$<$
+
+clean:\\
+	rm -f iran3d *.o
+
+clear:\\
+	rm *.o
+
+Then, you can just type "make" to compile the code:
+
+\quad \textsl{make}
+
+Finally, an executable file "im3d" should be generated when the build is complete.
+
+\subsection{Command switch}
+
+The geometry modules are not open-source but can be called in the terms of static libraries, that is
+
+\quad \textsl{struct\_s.a, struct\_m.a.}
+
+where s and m denote as serial and parallel version of the libraries, respectively. Thus, please switch 'LIBFLAG = -L. -lstruct\_s' to 'LIBFLAG = -L. -lstruct\_m', when use the MPI parallel version.
+
+\subsection{Errors that can occur when making IM3D}
+
+Link errors: all of the libraries used in makefile should be 32-bit version, including $gcc$ and $mpich$ libraries, etc.
+%----------------------------------------------------------------------------------------
+
+\section{Runing IM3D}
+
+IM3D can be run from a command-line options in a serial computer or a MPI parallel super computer.
+
+serial-single-thread:
+
+\quad \textsl{./im3d -command}
+
+serial-multi-threads:
+
+\quad \textsl{./multithread.sh}
+
+MPI parallel:
+
+\quad e.g., \textsl{mpirun -n \$cpu ./im3d -command}
+
+%----------------------------------------------------------------------------------------
+
+\section{Command-line Options}
+
+IM3D can be run from a command line, so that you can check the output. If no parameters are provided, IM3D assumes that there is a configuration file named Config.in in the current directory and loads the configuration from this file. However, you can provide various command line arguments (they are all optional):
+
+\begin{itemize}
+\item[] -h                       \quad Prints the help (basically like this table).
+\item[] -l                        \quad Display the license file.
+\item[] -c FILENAME    \quad Instructs IM3D to use FILENAME as the configuration file instead of the default Config.in.
+\item[] -p NUMBER      \quad Specify how much info to print to console. -2 means very little, 2 means a lot, with various possibilities in between.
+\item[] -n NUMBER      \quad Default is 0. Specifies how many ions are simulated (overrides the setting speci- fied in the config file).
+\item[] -E NUMBER      \quad Sets the energy of the ions. This option overrides the setting from the config file.
+\item[] -w                      \quad Wait for return key before exiting (useful if started from another program and you still want to see output).
+\item[] -m -d                 \quad Do not simulate anything, only estimate memory usage (roughly). Print details for memory usage (only useful when -m option also supplied).
+\item[] -g STRING        \quad Generate and update status file while running. See details below.
+\end{itemize}
+
+The program mostly does not check whether the input parameters make any sense. In case some parameters are missing or completely out of range, the program will most likely crash or create strange results.
+
+The -g option is useful when letting IM3D do background work for other programs. It instructs IM3D to output its current status to a file, which can be monitored by other programs (for example by a user interface). If it is set, every 200 ions IM3D writes exactly four lines to the file ir{\_}state.dat. The first line contains the word IM3D and the version of IM3D. The second line contains the string submitted on the command line after the -g option. The third line contains a status word. The fourth line contains the number of ions that have been simulated. The status words and their meanings are:
+
+\begin{itemize}
+\item[] init0 \quad IM3D has started.
+\item[] init1 \quad The config files have been read.
+\item[] init2 \quad Everything is initialized and ready.
+\item[] sim \quad Simulation is running.
+\item[] simend \quad Simulation has finished.
+\item[] end \quad Simulation results have been stored and IM3D will terminate immediately.
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+
+\section{IM3D Screen Output}
+
+As IM3D reads an input script, it prints information to the screen about significant actions it tanks to setup a simulation. When the simulation is ready to begin, IM3D performs various initializations and prints the feed-back information. It also prints the details of the initial geometry structure of the system. During the run itself, completed status is printed periodically, every constant ions numbers. When the run concludes, IM3D appends statistics about the CPU time approximately. An example set of the screen output is shown here:
+
+************************************************************************\\
+IM3D: Ion IRadiation of Nanostructured materials\\
+        -- a 3D parallel Monte Carlo simulation code\\
+\\
+IM3D Version 1.0.0, Apr. 29th, 2014\\
+ -- \\
+by Yonggang Li (Y.G. Li), 2014, ygli@theory.issp.ac.cn \& ygli@mit.edu;\\
+Institute of Solid Status of Physics, Chinese Academy of Sciences;\\
+\& Nuclear Science and Engineering, Massachusetts Institute of Technology.\\
+\\
+Refers to:\\
+  H.M. Li, H.Y. Wang, Y.G. Li \& Z.J. Ding*'s CSG/FETM geometry methods;\\
+\& C. Borschel's OSS 'iradina' and F. Schiettekatte's OSS 'corteo'.\\
+\\
+This program comes with ABSOLUTELY NO WARRANTY.\\
+This is free software, and you are welcome to redistribute it under\\
+certain conditions, see LICENCE for details.\\
+************************************************************************\\
+\\
+Seed in node 2 is: 39419295	93145296\\
+Seed in node 1 is: 39419294	93145295\\
+Seed in node 3 is: 39419296	93145297\\
+Seed in node 0 is: 39419293	93145294\\
+Configuration read from temp\_configfile.im3d.\\
+Corteo scattering matrix loaded.\\
+Lists of random numbers generated.\\
+Chu's straggling data read.\\
+Invsere Erf list read.\\
+Invsere Erf list randomized.\\
+Prepare scattering matrices for ion on target collisions... finished\\
+Prepare scattering matrices for recoil on target collisions...\\
+i: 0; my\_shape:  1; is\_full:   1\\
+i: 1; my\_shape:  2; is\_full:   1\\
+i: 2; my\_shape:  3; is\_full:   1\\
+i: 3; my\_shape:  4; is\_full:   1\\
+i: 4; my\_shape:  5; is\_full:   1\\
+i: 5; my\_shape:  6; is\_full:   1\\
+i: 6; my\_shape:  7; is\_full:   1\\
+i: 7; my\_shape:  8; is\_full:   1\\
+i: 8; my\_shape:  9; is\_full:   1\\
+z0\_max\_csg: 101 (nm), must larger than the max depth of goemetry structure!\\
+i: 0; my\_shape:  1; is\_full:   1\\
+i: 1; my\_shape:  2; is\_full:   1\\
+i: 2; my\_shape:  3; is\_full:   1\\
+i: 3; my\_shape:  4; is\_full:   1\\
+i: 4; my\_shape:  5; is\_full:   1\\
+i: 5; my\_shape:  6; is\_full:   1\\
+i: 6; my\_shape:  7; is\_full:   1\\
+i: 7; my\_shape:  8; is\_full:   1\\
+i: 8; my\_shape:  9; is\_full:   1\\
+z0\_max\_csg: 101 (nm), must larger than the max depth of goemetry structure!\\
+ finished\\
+Materials read from temp\_matfile.im3d.\\
+Initializing target.\\
+Target structure definition file: temp\_structfile.im3d\\
+\\
+Target size is: \\
+x: 60 cells, 10 nm per cell, 600 nm in total.\\
+y: 60 cells, 10 nm per cell, 600 nm in total.\\
+z: 20 cells, 5 nm per cell, 100 nm in total.\\
+Total: 72000 cells in 3.6e+07 nm\^3.\\
+----------------------------------------------\\
+i: 0; my\_shape:  1; is\_full:   1\\
+  Solid Sphere:\\
+    Radius(nm):   50.000\\
+    Center(nm):  100.000  100.000   50.000\\
+i: 1; my\_shape:  2; is\_full:   1\\
+  Solid Tetrahedrona:\\
+Vertex(nm):    300.000    110.000      0.100\\
+               300.000     50.000    100.000\\
+               250.000    140.000    100.000\\
+               350.000    140.000    100.000\\
+i: 2; my\_shape:  3; is\_full:   1\\
+  Solid Cuboid:\\
+     Vertex(nm): \\
+    450.000     50.000      0.000 \\
+Side Length(nm): \\
+    100.000    100.000    100.000 \\
+    Orientation: \\
+      1.000      0.000      0.000 \\
+      0.000      1.000      0.000 \\
+      0.000      0.000      1.000 \\
+i: 3; my\_shape:  4; is\_full:   1\\
+  Solid Ellipsoid:\\
+    Semi-axes(nm): \\
+      75.000   50.000   40.000\\
+    Shift(nm):  100.000  300.000   50.000\\
+i: 4; my\_shape:  5; is\_full:   1\\
+  Solid Taper:\\
+    Vertex Angle(D):   30.000\\
+         Height(nm):   80.000\\
+    Shift(nm):  300.000  300.000    0.100\\
+i: 5; my\_shape:  6; is\_full:   1\\
+  Solid Column:\\
+    Radius(nm):   50.000\\
+    Height(nm):  100.000\\
+    Shift(nm):  500.000  300.000    0.000\\
+i: 6; my\_shape:  7; is\_full:   1\\
+  Solid Polyhedron:\\
+  6\\
+   4\\
+  50.000  425.000  100.010\\
+  50.000  575.000  100.010\\
+  59.963  575.000    0.000\\
+  59.963  425.000    0.000\\
+   4\\
+  59.963  425.000    0.000\\
+  59.963  575.000    0.000\\
+ 144.963  575.000    0.000\\
+ 144.963  425.000    0.000\\
+   4\\
+ 144.963  425.000    0.000\\
+ 144.963  575.000    0.000\\
+ 154.926  575.000  100.010\\
+ 154.926  425.000  100.010\\
+   4\\
+  50.000  425.000  100.010\\
+  50.000  575.000  100.010\\
+ 154.926  575.000  100.010\\
+ 154.926  425.000  100.010\\
+   4\\
+  50.000  425.000  100.010\\
+  59.963  425.000    0.000\\
+ 144.963  425.000    0.000\\
+ 154.926  425.000  100.010\\
+   4\\
+  50.000  575.000  100.010\\
+  59.963  575.000    0.000\\
+ 144.963  575.000    0.000\\
+ 154.926  575.000  100.010\\
+i: 7; my\_shape:  8; is\_full:   1\\
+  Solid Paraboloid:\\
+    Radius(nm):   50.000\\
+    Height(nm):  100.000\\
+    Shift(nm):  300.000  500.000    0.000\\
+i: 8; my\_shape:  9; is\_full:   1\\
+  Solid Hyperboloid:\\
+    Distance(nm):   20.000\\
+      Radius(nm):   50.000\\
+      Height(nm):   80.000\\
+    Shift(nm):  500.000  500.000    0.000\\
+z0\_max\_csg: 101 (nm), must larger than the max depth of goemetry structure!\\
+----------------------------------------------\\
+This is the CSG geometry version of im3d.\\
+\\
+Target composition read from temp\_compfile.im3d.\\
+Target structure read from temp\_structfile.im3d.\\
+Normalization factor:	1\\
+\\
+Starting simulation of irradiation...\\
+i: 0; my\_shape:  1; is\_full:   1\\
+i: 1; my\_shape:  2; is\_full:   1\\
+i: 2; my\_shape:  3; is\_full:   1\\
+i: 3; my\_shape:  4; is\_full:   1\\
+i: 4; my\_shape:  5; is\_full:   1\\
+i: 5; my\_shape:  6; is\_full:   1\\
+i: 6; my\_shape:  7; is\_full:   1\\
+i: 7; my\_shape:  8; is\_full:   1\\
+i: 8; my\_shape:  9; is\_full:   1\\
+z0\_max\_csg: 101 (nm), must larger than the max depth of goemetry structure!\\
+Completed: 0\%\\
+Completed: 0.8\%\\
+Completed: 1.6\%\\
+...\\
+...\\
+...\\
+Completed: 97.6\%\\
+Completed: 98.4\%\\
+Completed: 99.2\%\\
+Storing final results: ...\\
+ done.\\
+\\
+Run time: 71.000000 seconds.
+
+%----------------------------------------------------------------------------------------
+
+

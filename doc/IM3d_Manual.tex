@@ -1,0 +1,249 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Software User Manual
+% LaTeX Template
+% Version 1.0 (May 1, 14)
+%
+% Note:
+% Make sure to edit document variables in the User_Manual.cls file
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+%\documentclass[11pt, a4paper, oneside]{Manual}  % Paper size, default font size and one-sided paper
+\documentclass[11pt, a4paper, twoside]{Manual}  % Paper size, default font size and two-sided paper
+
+\usepackage{enumerate}  % The enumerate-environment is used to create numbered lists
+
+\graphicspath{{Pictures/}}  % Specifies the directory where pictures are stored
+
+\usepackage[square, numbers, comma, sort&compress]{natbib}  % Use the natbib reference package - read up on this to edit the reference style; if you want text (e.g. Smith et al., 2012) for the in-text references (instead of numbers), remove 'numbers'
+\hypersetup{urlcolor=blue, colorlinks=true}  % Colors hyperlinks in blue - change to black if annoying
+\title{\ttitle}   % Defines the thesis title - don't touch this
+
+\begin{document}
+
+\frontmatter  % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
+
+\setstretch{1.3}  % Line spacing of 1.3
+
+% Define the page headers using the FancyHdr package and set up for one-sided printing
+\fancyhead{}  % Clears all page headers and footers
+\rhead{\thepage}  % Sets the right side header to show the page number
+\lhead{}  % Clears the left side page header
+
+\pagestyle{fancy}  % Finally, use the "fancy" page style to implement the FancyHdr headers
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}  % New command to make the lines in the title page
+
+% PDF meta-data
+\hypersetup{pdftitle={\ttitle}}
+\hypersetup{pdfsubject=\subjectname}
+\hypersetup{pdfauthor=\authornames}
+\hypersetup{pdfkeywords=\keywordnames}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{titlepage}
+\begin{center}
+
+%\textsc{\LARGE \univname}\\[1.5cm]  % University name
+\textsc{\Large User Manual}\\[0.5cm]  % Thesis type
+
+\HRule \\[0.4cm] % Horizontal line
+{\huge \bfseries \ttitle}\\[0.4cm]  % Thesis title
+\HRule \\[1.5cm] % Horizontal line
+
+\emph{} \\
+
+\textsc{\Large V1.0.0}\\[2.0cm]
+
+\href{http://theory.issp.ac.cn}{\LARGE \authornames}\\[1.5cm]  % Author name - remove the \href bracket to remove the link
+
+\large \textit{Copyright (2014-2015) ISSP-ACS \& NSE-MIT.}\\
+\large \textit{This software and manual is distributed under the GNU General Public License.}\\[5.0cm] % University requirement text
+\textit{* * *}\\[0.5cm]
+\groupname\\\deptname\\[0.5cm]  % Research group name and department name
+
+{\large \today}\\[4cm] % Date
+%\includegraphics{Logo}  % University/department logo - uncomment to place it
+
+\vfill
+\end{center}
+
+\end{titlepage}
+
+%----------------------------------------------------------------------------------------
+%	DECLARATION PAGE
+%	Your institution may give you a different text to place here
+%----------------------------------------------------------------------------------------
+
+\Declaration{
+
+\addtocontents{toc}{\vspace{1em}} % Add a gap in the Contents, for aesthetics
+
+IM3D stands for Ion Irradiation of Nanostructured Materials - a 3D Parallel Monte Carlo Simulation Code.
+
+Copyright (2014-2015) Institute of Solid State Physics, Chinese Academy of Sciences \& Nuclear Science and Engineering, Massachusetts Institute of Technology.
+This software is distributed under the GNU General Public License.
+Coded by Yonggang Li (Y.G. Li), \href{ygli@theory.issp.ac.cn}{ygli@theory.issp.ac.cn}, 2014, ISSP, ACS.
+
+\begin{itemize}
+
+\item[\tiny{$\blacksquare$}] IM3D is a 3D Monte Carlo simulation code designed to run efficiently on serial or parallel computers. It can simulate the transport of ions and subsequent radiation damages in arbitrary complex 3D nanostructured materials.
+It is an open-source code, distributed freely under the terms of the GNU Public License (GPL).
+
+\item[\tiny{$\blacksquare$}] IM3D was sponsored by Prof. \href{http://li.mit.edu}{Ju Li} and Prof. \href{http://}{Zhi Zeng}, and mainly developed by Dr. \href{http://}{Yonggang Li} during his visiting to MIT in 2014. The supporting of CSG/FETM geometric algorithms form Prof. \href{http://http://micro.ustc.edu.cn/DingZJ/}{Zejun Ding} as well as useful contributions and discussions from Dr. Machal Short and Yang Yang are very appreciate.
+
+\item[\tiny{$\blacksquare$}]  If you have any questions, please contact to Dr. Yonggang Li, who can be emailed at \href{ygli@theory.issp.ac.cn}{ygli@theory.issp.ac.cn}.
+The IM3D Website at \href{http://}{ISSP} and \href{http://li.mit.edu/Archive/IM3D}{MIT} has more information about the code and its uses.
+
+\end{itemize}
+}
+
+\clearpage  % Start a new page
+
+%----------------------------------------------------------------------------------------
+%	ACKNOWLEDGEMENTS
+%----------------------------------------------------------------------------------------
+
+\setstretch{1.3}  % Reset the line-spacing to 1.3 for body text (if it has changed)
+
+\acknowledgements{\addtocontents{toc}{\vspace{1em}}  % Add a gap in the Contents, for aesthetics
+
+This code was mainly supported by the scholarship from China Scholarship Council and Institute of Solid State Physics, Chinese Academy of Sciences (CAS) and partly by Massachusetts Institute of Technology (MIT). The subsequent supports come from the National Science Foundation of China under Grant Nos. 11275229, 11475215 \& NSAF U1230202, the Special Funds for Major State Basic Research Project of China (973) under Grant No. 2012CB933702, the Hefei Center for Physical Science and Technology under Grant No. 2012FXZY004, and Director Grants of CASHIPS. Part of the tests were performed at the Center for Computational Science of CASHIPS, the ScGrid of Supercomputing Center, and the Computer Network Information Center of the Chinese Academy of Sciences. Y.G. Li is very grateful to Prof. Xiaohong Zheng and Prof. Yongsheng Zhang for their helpful suggestions on this code and works on website design.
+}
+\clearpage  % Start a new page
+
+%----------------------------------------------------------------------------------------
+%	LIST OF CONTENTS/FIGURES/TABLES PAGES
+%----------------------------------------------------------------------------------------
+
+\pagestyle{fancy}  % The page style headers have been "empty" all this time, now use the "fancy" headers as defined before to bring them back
+
+\lhead{\emph{Contents}}  % Set the left side page header to "Contents"
+\tableofcontents % Write out the Table of Contents
+
+%\lhead{\emph{List of Figures}}  % Set the left side page header to "List of Figures"
+%\listoffigures  % Write out the List of Figures
+
+%\lhead{\emph{List of Tables}}  % Set the left side page header to "List of Tables"
+%\listoftables  % Write out the List of Tables
+
+%----------------------------------------------------------------------------------------
+%	ABBREVIATIONS
+%----------------------------------------------------------------------------------------
+
+%\clearpage  % Start a new page
+
+%\setstretch{1.5}  % Set the line spacing to 1.5, this makes the following tables easier to read
+
+%\lhead{\emph{Abbreviations}}  % Set the left side page header to "Abbreviations"
+%\listofsymbols{ll}  % Include a list of Abbreviations (a table of two columns)
+%{
+%\textbf{LAH} & \textbf{L}ist \textbf{A}bbreviations \textbf{H}ere \\
+%%\textbf{Acronym} & \textbf{W}hat (it) \textbf{S}tands \textbf{F}or \\
+%}
+
+%----------------------------------------------------------------------------------------
+%	PHYSICAL CONSTANTS/OTHER DEFINITIONS
+%----------------------------------------------------------------------------------------
+
+%\clearpage % Start a new page
+
+%\lhead{\emph{Physical Constants}} % Set the left side page header to "Physical Constants"
+
+%\listofconstants{lrcl} % Include a list of Physical Constants (a four column table)
+%{
+%Speed of Light & $c$ & $=$ & $2.997\ 924\ 58\times10^{8}\ \mbox{ms}^{-\mbox{s}}$ (exact)\\
+%% Constant Name & Symbol & = & Constant Value (with units) \\
+%}
+
+%----------------------------------------------------------------------------------------
+%	SYMBOLS
+%----------------------------------------------------------------------------------------
+
+%\clearpage % Start a new page
+
+%\lhead{\emph{Symbols}} % Set the left side page header to "Symbols"
+
+%\listofnomenclature{lll} % Include a list of Symbols (a three column table)
+%{
+%$a$ & distance & m \\
+%$P$ & power & W (Js$^{-1}$) \\
+%% Symbol & Name & Unit \\
+
+%& & \\ % Gap to separate the Roman symbols from the Greek
+
+%$\omega$ & angular frequency & rads$^{-1}$ \\
+%% Symbol & Name & Unit \\
+%}
+
+%----------------------------------------------------------------------------------------
+%	DEDICATION
+%----------------------------------------------------------------------------------------
+
+%\setstretch{1.3} % Return the line spacing back to 1.3
+
+%\pagestyle{empty} % Page style needs to be empty for this page
+
+%\dedicatory{For/Dedicated to/To my\ldots} % Dedication text
+
+%\addtocontents{toc}{\vspace{2em}} % Add a gap in the Contents, for aesthetics
+
+%----------------------------------------------------------------------------------------
+%	THESIS CONTENT - CHAPTERS
+%----------------------------------------------------------------------------------------
+
+\mainmatter % Begin numeric (1,2,3...) page numbering
+
+\pagestyle{fancy} % Return the page headers back to the "fancy" style
+
+% Include the chapters of the thesis as separate files from the Chapters folder
+% Uncomment the lines as you write the chapters
+
+\input{Chapters/Chapter1}
+\input{Chapters/Chapter2}
+\input{Chapters/Chapter3}
+\input{Chapters/Chapter4}
+\input{Chapters/Chapter5}
+\input{Chapters/Chapter6}
+\input{Chapters/Chapter7}
+\input{Chapters/Chapter8}
+
+%----------------------------------------------------------------------------------------
+%	THESIS CONTENT - APPENDICES
+%----------------------------------------------------------------------------------------
+
+\addtocontents{toc}{\vspace{2em}} % Add a gap in the Contents, for aesthetics
+
+\appendix % Cue to tell LaTeX that the following 'chapters' are Appendices
+
+% Include the appendices of the thesis as separate files from the Appendices folder
+% Uncomment the lines as you write the Appendices
+
+\input{Appendices/AppendixA}
+\input{Appendices/AppendixB}
+%\input{Appendices/AppendixC}
+
+\addtocontents{toc}{\vspace{2em}} % Add a gap in the Contents, for aesthetics
+
+\backmatter
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+
+\label{Bibliography}
+
+\lhead{\emph{Bibliography}} % Change the page header to say "Bibliography"
+
+\bibliographystyle{unsrtnat} % Use the "unsrtnat" BibTeX style for formatting the Bibliography
+
+\bibliography{Bibliography} % The references (bibliography) information are stored in the file named "Bibliography.bib"
+
+\end{document}

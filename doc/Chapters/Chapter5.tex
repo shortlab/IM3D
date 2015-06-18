@@ -1,0 +1,56 @@
+% Chapter 5
+
+\chapter{Accelerating IM3D Performance}  % Main chapter title
+
+\label{Chapter5}  % For referencing the chapter elsewhere, use \ref{Chapter1}
+
+\lhead{Chapter 5. \emph{Accelerating IM3D Performance}}  % This is for the header on each page - perhaps a shortened title
+
+%----------------------------------------------------------------------------------------
+
+\section{General Strategies}
+
+In order to further increasing the efficiency of the code, we introduce the fast database indexing technique proposed by Schiettekatte in Corteo code\cite{Schiettekatte:2008} to sampling the scattering and azimuthal angles and the stopping powers as well as two numerical acceleration algorithms to implement parallel computing.
+
+%----------------------------------------------------------------------------------------
+
+\section{Fast Database Indexing Techniques}
+
+For the calculation of the classical binary atomic scattering angle, IM3D code thus introduce the fast routines from Corteo which are based on both the fast indexing technique and the MAGIC approximation\cite{Ziegler:2010} alternatively in terms of accuracy, efficiency and memory usage. For the calculation of the stopping power, the same algorithm of computing the classical binary atomic scattering angle can also be used by firstly generating the tables of stopping power values and directly finding a desired value form these tables in use.
+%The fast indexing technique naturally have the advantage of high efficiency for determining the scattering angles comparing to MAGIC algorithm, but nearly without reducing of accuracy.
+For the case of the number of elements included in a target is not too big, the memory burden is no more than several MB. The detailed treatment of the fast indexing techniques can be found in Ref.\cite{Borschel:2011,Schiettekatte:2008}.
+
+\subsection{}
+
+
+\subsection{}
+
+
+\subsection{}
+
+
+%----------------------------------------------------------------------------------------
+
+\section{MPI Parallel and Multi-threading}
+
+Furthermore, in order to further enhance the computational efficiency, the MPI parallel and multi-threading methods have been integrated into IM3D code. The code can be easily parallelized by dividing the number of incident ions and offer an almost linear speed-up ratio with the number of processors. While the multi-threading technique can be implemented by just using a shell in-script, which is much feasible for the code running on a multi-core platform.
+
+\subsection{MPI Parallel method}
+
+\subsection{Multi-threading method}
+
+
+
+%----------------------------------------------------------------------------------------
+
+\section{Measuring Performance}
+
+Based on the above acceleration techniques, a typical simulation of $10^5$ ions with energy of keV to MeV consumes only seconds to minutes in a modern serial computer even for complex 3D structures, and would be more faster when using the parallel or multi-threading version in a super computer. Generally, IM3D code is faster than TRIM code by at least two to three orders of magnitude, depending on the simulation parameters and the acceleration techniques.
+
+\subsection{}
+
+
+\subsection{}
+
+
+%----------------------------------------------------------------------------------------

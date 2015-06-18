@@ -1,0 +1,202 @@
+\begin{thebibliography}{43}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Ziegler et~al.(2010)Ziegler, Ziegler, and Biersack]{Ziegler:2010}
+J.~F. Ziegler, M.~D. Ziegler, and J.~P. Biersack.
+\newblock \emph{Nucl. Inst. Meth. Phys. Res. B}, 268:\penalty0 1818--1823; SRIM
+  website, http://www.srim.org, 2010.
+
+\bibitem[Schiettekatte(2008)]{Schiettekatte:2008}
+F.~Schiettekatte.
+\newblock \emph{Nucl. Inst. Meth. Phys. Res. B}, 266:\penalty0 1880--1885,
+  2008.
+
+\bibitem[Li and Ding(2011)]{Li:2005}
+H.~M. Li and Z.~J. Ding.
+\newblock \emph{Scanning}, 27:\penalty0 254--267, 2011.
+
+\bibitem[Li et~al.(2008)Li, Mao, Li, Xiao, and Ding]{Li:2008}
+Y.~G. Li, S.~F. Mao, H.~M. Li, S.~M. Xiao, and Z.~J. Ding.
+\newblock \emph{J. Appl. Phys.}, 104:\penalty0 064901, 2008.
+
+\bibitem[Li et~al.(2009)Li, Ding, and Zhang]{Li:2009}
+Y.~G. Li, Z.~J. Ding, and Z.~M. Zhang.
+\newblock \emph{J. Appl. Phys.}, 106:\penalty0 024316, 2009.
+
+\bibitem[Li et~al.(2011)Li, Mao, and Ding]{Li2:2011}
+Y.~G. Li, S.~F. Mao, and Z.~J. Ding.
+\newblock \emph{Applications of Monte Carlo Method in Science and Engineering:
+  Chapter 11. Monte Carlo Simulation of SEM and SAM Images}.
+\newblock Eds. S. Mark and S. Mordechai, InTech-Open Access Publisher, 2011.
+
+\bibitem[Zhang et~al.(2011)Zhang, Wang, Li, Mao, and Ding]{Zhang:2011}
+P.~Zhang, H.~Y. Wang, Y.~G. Li, S.~F. Mao, and Z.~J. Ding.
+\newblock \emph{Scanning}, 33:\penalty0 1--6, 2011.
+
+\bibitem[Li et~al.(2013)Li, Zhang, and Ding]{Li:2013}
+Y.~G. Li, P.~Zhang, and Z.~J. Ding.
+\newblock \emph{Scanning}, 35:\penalty0 127--139, 2013.
+
+\bibitem[Borschel and Ronning(2011)]{Borschel:2011}
+C.~Borschel and C.~Ronning.
+\newblock \emph{Nucl. Inst. Meth. Phys. Res. B}, 269:\penalty0 2133--2138,
+  2011.
+
+\bibitem[Geuzaine and Remacle(2009)]{Geuzaine:2009}
+C.~Geuzaine and J.-F. Remacle.
+\newblock \emph{Inter. J. Nume. Meth. Eng.}, 79:\penalty0 1309--1331;
+  http://geuz.org/gmsh/., 2009.
+
+\bibitem[Kinchin and Pease(1955)]{Kinchin:1955}
+G.~H. Kinchin and R.~S. Pease.
+\newblock \emph{Rep. Prog. Phys.}, 18:\penalty0 1--51, 1955.
+
+\bibitem[Norgett et~al.(1975)Norgett, Robinson, and Torrens]{Norgett:1975}
+M.~J. Norgett, M.~T. Robinson, and I.~M. Torrens.
+\newblock \emph{Nucl. Eng. Des.}, 33:\penalty0 50--54, 1975.
+
+\bibitem[Li(2003)]{Li:2003}
+J.~Li.
+\newblock \emph{Modelling Simul. Mater. Sci. Eng.}, 11:\penalty0 173--177;
+  http://li.mit.edu/Archive/Graphics/A/., 2003.
+
+\bibitem[Stoller et~al.(2013)Stoller, Toloczko, Was, Certain, Dwaraknath, and
+  Garner]{Stoller:2013}
+R.~E. Stoller, M.~B. Toloczko, G.~S. Was, A.~G. Certain, S.~Dwaraknath, and
+  F.~A. Garner.
+\newblock \emph{Nucl. Inst. Meth. Phys. Res. B}, 310:\penalty0 75--80, 2013.
+
+\bibitem[Chang et~al.(2012)Chang, Zhang, Zhu, Edmondson, and Weber]{Chang:2012}
+Y.~Q. Chang, Y.~W. Zhang, Z.~H. Zhu, P.~D. Edmondson, and W.~J. Weber.
+\newblock \emph{Nucl. Inst. Meth. Phys. Res. B}, 286:\penalty0 173--179, 2012.
+
+\bibitem[Zhang et~al.(2009)Zhang, Bae, Sun, Wang, Ishimaru, Zhu, Jiang, and
+  Weber]{Zhang:2009}
+Y.~W. Zhang, I.~T. Bae, K.~Sun, C.~M. Wang, M.~Ishimaru, Z.~H Zhu, W.~L. Jiang,
+  and W.~J. Weber.
+\newblock \emph{J. Appl. Phy.}, 105:\penalty0 104901, 2009.
+
+\bibitem[Paul(2013)]{Paul:2013}
+H.~Paul.
+\newblock \emph{AIP Conf. Proc.}, 1525:\penalty0 309--313, 2013.
+
+\bibitem[Li et~al.(2012)Li, Nastasi, and Misra]{Li:2012}
+N.~Li, M.~Nastasi, and A.~Misra.
+\newblock \emph{Inter. J. Plastic.}, 32-33:\penalty0 1--16, 2012.
+
+\bibitem[Vanithakumari and Nanda(2008)]{Vanithakumari:2008}
+S.~C. Vanithakumari and K.~K. Nanda.
+\newblock \emph{Phys. Lett. A}, 372:\penalty0 6930–6934, 2008.
+
+\bibitem[Ouyang et~al.(2008)Ouyang, Li, Tan, and Yang]{Ouyang:2008}
+G.~Ouyang, X.~L. Li, X.~Tan, and G.~W. Yang.
+\newblock \emph{Nanotech.}, 19:\penalty0 045709, 2008.
+
+\bibitem[Ren et~al.(2012)Ren, Kuronen, and Nordlund]{Ren:2012}
+W.~Ren, A.~Kuronen, and K.~Nordlund.
+\newblock \emph{Phys. Rev. B}, 86:\penalty0 104114, 2012.
+
+\bibitem[Liontas et~al.(2014)Liontas, Gu, Fu, Wang, Li, Mara, and
+  Greer]{Liontas:2014}
+R.~Liontas, X.~W. Gu, E.~G. Fu, Y.~Q. Wang, N.~Li, N.~Mara, and J.~R. Greer.
+\newblock \emph{Nano Lett}, 14:\penalty0 5176--5183, 2014.
+
+\bibitem[Landau et~al.(2014)Landau, Guo, Hattar, and Greer]{Landau:2014}
+P.~Landau, Q.~Guo, K.~Hattar, and J.~R. Greer.
+\newblock \emph{Adv. Funct. Mater.}, 23:\penalty0 1281--1288, 2014.
+
+\bibitem[Chen et~al.(2013)Chen, Jung, Henry, de~Carlan, Sauvage, Duval, Barthe,
+  and Hoffelner]{Chen:2013}
+J.~Chen, P.~Jung, J.~Henry, Y.~de~Carlan, T.~Sauvage, F.~Duval, M.~F. Barthe,
+  and W.~Hoffelner.
+\newblock \emph{J. Nucl. Mater.}, 437:\penalty0 432--437, 2013.
+
+\bibitem[Brimbal et~al.(2014)Brimbal, Miro, de~Castro, Poissonnet, Trocellier,
+  Serruys, and Beck]{Brimbal:2014}
+D.~Brimbal, S.~Miro, V.~de~Castro, S.~Poissonnet, P.~Trocellier, Y.~Serruys,
+  and L.~Beck.
+\newblock \emph{J. Nucl. Mater.}, 447:\penalty0 179--182, 2014.
+
+\bibitem[Fave et~al.(2014)Fave, Pouchon, Dobeli, Schulte-Borchers, and
+  Kimura]{Fave:2014}
+L.~Fave, M.~A. Pouchon, M.~Dobeli, M.~Schulte-Borchers, and A.~Kimura.
+\newblock \emph{J. Nucl. Mater.}, 445:\penalty0 235--240, 2014.
+
+\bibitem[Huang et~al.(2014)Huang, Harris, Maloy, and Hosemann]{Huang:2014}
+Z.~J. Huang, A.~Harris, S.~A. Maloy, and P.~Hosemann.
+\newblock \emph{J. Nucl. Mater.}, 451:\penalty0 162--167, 2014.
+
+\bibitem[Lazauskas et~al.(2013)Lazauskas, Kenny, Smith, Nagra, Dholakia, and
+  Valsakumar]{Lazauskas:2013}
+T.~Lazauskas, S.~D. Kenny, R.~Smith, G.~Nagra, M.~Dholakia, and M.~C.
+  Valsakumar.
+\newblock \emph{J. Nucl. Mater.}, 437:\penalty0 317--325, 2013.
+
+\bibitem[Lescoat et~al.(2012)Lescoat, Ribis, Gentils, Kaitasov, de~Carlan, and
+  Legris]{Lescoat:2012}
+M-L. Lescoat, J.~Ribis, A.~Gentils, O.~Kaitasov, Y.~de~Carlan, and A.~Legris.
+\newblock \emph{J. Nucl. Mater.}, 428:\penalty0 176--182, 2012.
+
+\bibitem[Cui et~al.(2013)Cui, Fenton, Li, Shen, Liu, Luo, and Gu]{Cui:2013}
+A.~Cui, J.~C. Fenton, W.X. Li, Tiehan~H. Shen, Z.~Liu, Q.~Luo, and C.Z. Gu.
+\newblock \emph{Appl. Phys. Lett.}, 102:\penalty0 213112, 2013.
+
+\bibitem[Derlet et~al.(2007)Derlet, Nguyen-Manh, and Dudarev]{Derlet:2007}
+P.~M. Derlet, D.~Nguyen-Manh, and S.~L. Dudarev.
+\newblock \emph{Phys. Rev. B}, 76:\penalty0 054107, 2007.
+
+\bibitem[Becquart and Domain(2007)]{Becquart:2007}
+C.~S. Becquart and C.~Domain.
+\newblock \emph{Nucl. Instr. Methods Phys. Res. B}, 255:\penalty0 23--26, 2007.
+
+\bibitem[Wirth et~al.(2014)Wirth, Hammond, Krasheninnikov, and
+  Maroudas]{Wirth:2014}
+B.~D. Wirth, K.~D. Hammond, S.~I. Krasheninnikov, and D.~Maroudas.
+\newblock \emph{J. Nucl. Mater.}, in press, 2014.
+
+\bibitem[Biersack and Haggmark(1980)]{Biersack:1980}
+J.~P. Biersack and L.~G. Haggmark.
+\newblock \emph{Nucl. Inst. Meth.}, 174:\penalty0 257--269, 1980.
+
+\bibitem[Sommerfeld(1948)]{Sommerfeld:1932}
+A.~Sommerfeld.
+\newblock \emph{Z. Phys.}, 78:\penalty0 283--309, 1948.
+
+\bibitem[Lenz(1932)]{Lenz:1932}
+W.~Lenz.
+\newblock \emph{Z. F. Physik}, 77:\penalty0 713--722, 1932.
+
+\bibitem[Moliere(1947)]{Moliere:1947}
+G.~Moliere.
+\newblock \emph{Z. Naturforschung}, 2a:\penalty0 133--145, 1947.
+
+\bibitem[Bohr(1948)]{Bohr:1948}
+N.~Bohr.
+\newblock \emph{Mat. Fys. Medd. Dan. Vid. Selsk.}, 18:\penalty0 142--143, 1948.
+
+\bibitem[Ziegler(2004)]{Ziegler:2004}
+J.~F. Ziegler.
+\newblock \emph{Nucl. Inst. Meth. Phys. Res. B}, 219-220:\penalty0 1027--1036,
+  2004.
+
+\bibitem[Bohr and Dan(1948)]{Bohr2:1948}
+N.~Bohr and K.~Dan.
+\newblock \emph{Vid. Selsk. Mat.-Fys. Medd.}, 18:\penalty0 8, 1948.
+
+\bibitem[Chu(1976)]{Chu:1976}
+W.~K. Chu.
+\newblock \emph{Phys. Rev. A}, 13:\penalty0 2057, 1976.
+
+\bibitem[Yang et~al.(1991)Yang, O'Connor, and Wang]{Yang:1991}
+Q.~Yang, D.~J. O'Connor, and Z.~Wang.
+\newblock \emph{Nucl. Inst. Meth. Phys. Res. B}, 62:\penalty0 149, 1991.
+
+\bibitem[Bragg and Kleeman(1905)]{Bragg:1905}
+W.~H. Bragg and R.~Kleeman.
+\newblock \emph{Phil. Mag.}, 10:\penalty0 318, 1905.
+
+\end{thebibliography}

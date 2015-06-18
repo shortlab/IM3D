@@ -1,0 +1,36 @@
+This is the im3d software package.
+
+IM3D stands for A 3D Parallel Monte Carlo Simulation Code for Ion
+Irradiation of Nanostructured Materials.
+
+Copyright (2014-2015) Institute of Solid State Physics, Chinese Academic
+of Sciences & Nuclear Science and Engineering, Massachusetts Institute
+of Technology.
+This software is distributed under the GNU General Public License.
+Coded mainly by Yonggang Li, ygli@theory.issp.ac.cn, 2014, ISSP, ACS.
+
+----------------------------------------------------------------------
+
+IM3D is a 3d Monte Carlo simulation code designed to run efficiently
+on parallel computers. It can rapidly simulate the transport of ions
+and subsequent radiation damages in arbitrary complex 3D nanostructured
+materials. It is an open-source code, distributed freely under the
+terms of the GNU Public License (GPL).
+
+IM3D was sponsored by Prof. Ju Li and Prof. Zhi Zeng, and mainly developed
+by Dr. Yonggang Li during his visiting to MIT in 2014. The supporting of
+CSG/FETM geometric algorithms form Prof. Zejun Ding as well as useful
+contributions and discussions from Prof. Machal Short and Dr. Yang Yang
+are very appreciate.  Please visit the webiite at xxx.xxx.xxx for more
+information about the code and its uses.
+
+The im3d distribution includes the following files and directories:
+
+README			   this file
+LICENSE			   the GNU General Public License (GPL)
+bin			   
+doc			   documentation
+examples		   simple test problems
+lib			   libraries im3d can be linked with
+src			   source files
+tools			   pre- and post-processing tools

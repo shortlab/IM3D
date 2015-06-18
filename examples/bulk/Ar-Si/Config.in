@@ -1,0 +1,78 @@
+#<<<BEGIN CONFIGFILE
+# Configuration file for im3d
+
+[Ionbeam]
+max_no_ions=100000
+ion_Z=18
+ion_M=39.948002
+ion_E0=10000.000000
+ion_vx=-0.000000
+ion_vy=-0.000000
+ion_vz=1.000000
+ion_distribution=1
+enter_x=0.000000
+enter_y=0.000000
+enter_z=0.000000
+beam_spread=0.000000
+
+[Simulation]
+OutputFileBaseName=./output/
+output_format=1
+normalize_output=0
+display_interval=100
+storage_interval=100000
+status_update_interval=100000
+stroe_transmitted_ions=0
+stroe_transmitted_recoils=0
+store_exiting_limit=10
+store_energy_deposit=1
+store_ion_paths=0
+store_path_limit=-1
+transport_type=0
+multiple_collisions=0flight_length_type=0
+scattering_calculation=0
+tracing_recoil_or_not=1
+store_recoil_cascades=0
+detail_sputtering=1
+single_ion_sputter_yields=0
+do_not_store_damage=0
+min_energy=5.000000
+seed1=39419293
+seed2=93145294
+
+[Target]
+geometry_type=0
+no_substrate=0
+straggling_model=3
+MaterialsFileName=Materials.in
+TargetstructureFileName=Structure.in
+
+#<<<BEGIN STRUCTUREFILE
+# Structure definition file for im3d
+
+[Target]
+cell_count_x=50
+cell_count_y=50
+cell_count_z=50
+cell_size_x=1.000000
+cell_size_y=1.000000
+cell_size_z=1.000000
+sub_surf_z=0.100000
+CompositionFileType=0
+CompositionFileName=Composition.in
+
+#<<<BEGIN MATFILE
+[Si]
+element_count=1
+density=4.977e+22
+elements_Z=14
+elements_M=28.085501
+elements_conc=1.000000
+elements_disp_energy=15.000000
+elements_latt_energy=2.000000
+elements_surf_energy=4.700000
+ion_surf_energy=2.00
+
+#<<<BEGIN COMPFILE
+  0
+

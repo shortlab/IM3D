@@ -1,0 +1,142 @@
+% Chapter 4
+
+\chapter{Output}  % Main chapter title
+
+All of output files can be found in the path of
+
+\quad \textsl{./output/}.
+
+\label{Chapter4}  % For referencing the chapter elsewhere, use \ref{Chapter1}
+
+\lhead{Chapter 1. \emph{Output}}  % This is for the header on each page - perhaps a shortened title
+
+%----------------------------------------------------------------------------------------
+
+\section{List of Output Files}
+
+In the output path, there would be a list of output files as defined in input script, i.e.,
+
+\begin{itemize}
+
+\item aiv.xyz.cfg
+
+\item cascades
+
+\item depth\_dist\_functions.dat
+
+\item disp.mat$*$.cfg, disp.mat$*$.msh or disp.mat$*$.vtk
+
+\item energy.deposit.cfg, energy.deposit.msh or energy.deposit.vtk
+
+\item int.mat$*$.cfg, int.mat$*$.msh or int.mat$*$.vtk
+
+\item ion\_paths
+
+\item ions.replacements.cfg, ions.replacements.msh or ions.replacements.vtk
+
+\item ions.total.cfg, ions.total.msh or ions.total.vtk
+
+\item leaving.mat$*$.cfg, leaving.mat$*$.msh or leaving.mat$*$.vtk
+
+\item leaving\_directions.ions
+
+\item leaving\_directions.sum
+
+\item leaving\_directions.z$*1$.m$*2$.mat$*3$.elem$*4$
+
+\item radial\_dist\_functions.dat
+
+\item repl.mat$*$.cfg, repl.mat$*$.msh or repl.mat$*$.vtk
+
+\item transmitted.ions
+
+\item vac.mat$*$.cfg, vac.mat$*$.msh or vac.mat$*$.vtk
+
+\end{itemize}
+
+\subsection{aiv.xyz.cfg}
+
+$aiv.xyz.cfg$ is an output file of the detailed position of ions and defects generated in materials, which includes 7 columns, i.e., x, y, z, defect type, defect belong to which ion, material and element. It is in the format of .cfg at present and can be viewed by AtomEye software directly. An example of this output file is list below:
+
+Number of particles = 801809\\
+A = 10 Angstrom (basic length-scale)\\
+H0(1,1) = 1000 A\\
+H0(1,2) = 0.0 A\\
+H0(1,3) = 0.0 A\\
+H0(2,1) = 0.0 A\\
+H0(2,2) = 1000 A\\
+H0(2,3) = 0.0 A\\
+H0(3,1) = 0.0 A\\
+H0(3,2) = 0.0 A\\
+H0(3,3) = 1000 A\\
+.NO\_VELOCITY.\\
+entry\_count = 7\\
+auxiliary[0] = type (A-I-V)\\
+auxiliary[1] = tab (A-ion)\\
+auxiliary[0] = mater\\
+auxiliary[1] = element\\
+4\\
+aiv\_pos\\
+0.500743	0.500435	0.001079	2	0	1	0\\
+0.500792	0.500568	0.001067	1	0	1	1\\
+0.500740	0.500452	0.001087	2	0	1	1\\
+0.500473	0.501270	0.001831	1	0	1	0\\
+0.500484	0.500152	0.001079	2	0	1	0\\
+0.500476	0.499380	0.001042	1	0	1	1\\
+...         ...         ...         .   .   .   .
+
+\subsection{Output: cascades}
+
+\subsection{Output: depth\_dist\_functions.dat}
+
+\subsection{Output: disp.mat$*$.cfg/.msh/.vtk}
+
+\subsection{Output: energy.deposit.cfg/.msh/.vtk}
+
+\subsection{Output: int.mat$*$.cfg/.msh/.vtk}
+
+\subsection{Output: ion\_paths}
+
+\subsection{Output: ions.replacements.cfg/.msh/.vtk}
+
+\subsection{Output: ions.total.cfg/.msh/.vtk}
+
+\subsection{Output: leaving.mat$*$.cfg/.msh/.vtk}
+
+\subsection{Output: leaving\_directions.ions}
+
+\subsection{Output: leaving\_directions.sum}
+
+\subsection{Output: leaving\_directions.z$*1$.m$*2$.mat$*3$.elem$*4$}
+
+\subsection{Output: radial\_dist\_functions.dat}
+
+\subsection{Output: repl.mat$*$.cfg/.msh/.vtk}
+
+\subsection{Output: transmitted.ions}
+
+\subsection{Output: vac.mat$*$.cfg/.msh/.vtk}
+
+%----------------------------------------------------------------------------------------
+
+\section{Output Format}
+
+Three types of output formats are given in IM3D code till now, including $.cfg$, $.msh$ and $.vtk$.
+
+\subsection{$.cfg$ format}
+
+
+\subsection{$.msh$ format}
+
+
+\subsection{$.vtk$ format}
+
+
+%----------------------------------------------------------------------------------------
+
+\section{Output Visualization}
+
+Different kinds of softwares can be feasibly used to visualize the 3D distributions of primary defects in output files, such as, \href{http://li.mit.edu/Archive/Graphics/A/}{AtomEye}, \href{http://geuz.org/gmsh/}{Gmsh} and \href{http://www.paraview.org/}{ParaView}, etc. AtomEye software is a easy tool to quickly visualize the $.cfg$ format files. While for much higher qualities, Gmsh or ParaView is commented to be used with the output files in the formats of $.msh$ and $.vtk$, respectively.
+
+%----------------------------------------------------------------------------------------
+

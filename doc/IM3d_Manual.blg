@@ -1,0 +1,101 @@
+This is BibTeX, Version 0.99d (TeX Live 2014)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: IM3d_Manual.aux
+The style file: unsrtnat.bst
+Database file #1: Bibliography.bib
+Repeated entry---line 345 of file Bibliography.bib
+ : @article{Chen:2013
+ :                   ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 744 of file Bibliography.bib
+ : @article{Li:2012
+ :                 ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 786 of file Bibliography.bib
+ : @article{Ouyang:2008
+ :                     ,
+I'm skipping whatever remains of this entry
+Warning--empty title in Ziegler:2010
+Warning--empty title in Schiettekatte:2008
+Warning--empty title in Li:2005
+Warning--empty title in Li:2008
+Warning--empty title in Li:2009
+Warning--empty title in Zhang:2011
+Warning--empty title in Li:2013
+Warning--empty title in Borschel:2011
+Warning--empty title in Geuzaine:2009
+Warning--empty title in Kinchin:1955
+Warning--empty title in Norgett:1975
+Warning--empty title in Li:2003
+Warning--empty title in Stoller:2013
+Warning--empty title in Chang:2012
+Warning--empty title in Zhang:2009
+Warning--empty title in Paul:2013
+Warning--empty title in Li:2012
+Warning--empty title in Vanithakumari:2008
+Warning--empty title in Ouyang:2008
+Warning--empty title in Ren:2012
+Warning--empty title in Liontas:2014
+Warning--empty title in Landau:2014
+Warning--empty title in Chen:2013
+Warning--empty title in Brimbal:2014
+Warning--empty title in Fave:2014
+Warning--empty title in Huang:2014
+Warning--empty title in Lazauskas:2013
+Warning--empty title in Lescoat:2012
+Warning--empty title in Cui:2013
+Warning--empty title in Derlet:2007
+Warning--empty title in Becquart:2007
+Warning--empty title in Wirth:2014
+Warning--empty title in Biersack:1980
+Warning--empty title in Sommerfeld:1932
+Warning--empty title in Lenz:1932
+Warning--empty title in Moliere:1947
+Warning--empty title in Bohr:1948
+Warning--empty title in Ziegler:2004
+Warning--empty title in Bohr2:1948
+Warning--empty title in Chu:1976
+Warning--empty title in Yang:1991
+Warning--empty title in Bragg:1905
+You've used 43 entries,
+            2481 wiz_defined-function locations,
+            805 strings with 8515 characters,
+and the built_in function-call counts, 17789 in all, are:
+= -- 1372
+> -- 981
+< -- 18
++ -- 376
+- -- 290
+* -- 1615
+:= -- 2834
+add.period$ -- 87
+call.type$ -- 43
+change.case$ -- 43
+chr.to.int$ -- 43
+cite$ -- 85
+duplicate$ -- 816
+empty$ -- 1653
+format.name$ -- 351
+if$ -- 3721
+int.to.chr$ -- 1
+int.to.str$ -- 44
+missing$ -- 44
+newline$ -- 181
+num.names$ -- 129
+pop$ -- 348
+preamble$ -- 1
+purify$ -- 43
+quote$ -- 0
+skip$ -- 458
+stack$ -- 0
+substring$ -- 1178
+swap$ -- 86
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 298
+warning$ -- 42
+while$ -- 127
+width$ -- 0
+write$ -- 481
+(There were 3 error messages)
