@@ -1,5 +1,5 @@
 #<<<BEGIN CONFIGFILE
-# Configuration file for iran3d
+# Configuration file for im3d
 
 [IonBeam]
 max_no_ions=1000000
@@ -49,7 +49,7 @@ MaterialsFileName=Materials.in
 TargetstructureFileName=Structure.in
 
 #<<<BEGIN STRUCTUREFILE
-# Structure definition file for iran3d
+# Structure definition file for im3d
 
 [Target]
 cell_count_x=90

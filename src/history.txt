@@ -98,3 +98,13 @@ Released:  2015-June-29
 Add the modulus (index64), which makes im3d can run on a 64-bit system with
 a 64-bit MPICH library.
 
+
+----------------------
+Version:   im3d_v1.2.1
+Released:  2021-October-13
+----------------------
+Merged Yonggang's libstruct_m.a file compiled with PIE support (CFLAGS = 
+-fPIE), made numerous cosmetic changes, removed all Mac temporary files, 
+removed Mac source tree ENTIRELY (as it's not being actively supported). 
+Removed all references to old 'iran3d' name. Fixed English descriptions 
+of all parameters within source files and for user output.

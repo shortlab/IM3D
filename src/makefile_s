@@ -1,4 +1,4 @@
-# This makefile can be used to compile iran3d.
+# This makefile can be used to compile im3d.
 
 # For Linux or UNIX systems I recommend using the gcc for compilation.
 # On Windows I recommend using mingw32.

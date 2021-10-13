@@ -90,7 +90,7 @@ LIBFLAG = -L. -lstruct\_m \# include static library, mpi
 \# If unsure, compile all with -O1 only.
 
 im3d \: im3d.o mpimod.o const.o init.o material.o target.o matrix.o index.o magic.o fileio.o cfgwriter.o mshwriter.o bulk.o utils.o random.o\\
-  \$(CC) \$(LDFLAGS) -o iran3d im3d.o mpimod.o const.o init.o material.o target.o matrix.o index.o magic.o fileio.o cfgwriter.o mshwriter.o bulk.o utils.o random.o \$(LIBFLAG)
+  \$(CC) \$(LDFLAGS) -o im3d im3d.o mpimod.o const.o init.o material.o target.o matrix.o index.o magic.o fileio.o cfgwriter.o mshwriter.o bulk.o utils.o random.o \$(LIBFLAG)
 
 im3d.o: im3d.h im3d.c
 
@@ -126,7 +126,7 @@ random.o: random.h random.c
 	\$(CC) -c \$(CFLAGS) \$$<$
 
 clean:\\
-	rm -f iran3d *.o
+	rm -f im3d *.o
 
 clear:\\
 	rm *.o
