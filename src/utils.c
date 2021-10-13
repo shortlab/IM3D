@@ -180,8 +180,8 @@ int print_help_text (void) {
     printf (" -h            print this help\n");
     printf (" -l            display license\n");
     printf (" -c FILENAME   specify name of config file. Default: Config.in\n");
-    printf (" -p NUMBER     specify how much info to print to console. > 0 means much,\n");
-    printf ("               < 0 means little\n");
+    printf (" -p NUMBER     specify how much info to print to console. > 0 means more,\n");
+    printf ("               < 0 means less\n");
     printf (" -n NUMBER     sets the maximum number of ions to be simulated to NUMBER.\n");
     printf ("               This option overrides the setting from the config file. \n");
     printf (" -E NUMBER     sets the energy of the ions.\n");

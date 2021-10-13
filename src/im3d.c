@@ -142,7 +142,7 @@ int main (int argc, char *argv[]) {
 #ifndef MPI_PRALLEL
             /* MPI=============================================== */
         if (mem_usage_only == 1) {
-            printf ("Estimated total memory requirement: %li MByte\n", (mem_usage / 0x100000) + 1);
+            printf ("Estimated total memory requirements: %li MB\n", (mem_usage / 0x100000) + 1);
             return 99;
             /* MPI=============================================== */
         }
@@ -256,7 +256,7 @@ int main (int argc, char *argv[]) {
                 store_results_vtk (OutputFileBaseName);
                 break;
             default :
-                printf ("ERROR: output format is not existent.");
+                printf ("ERROR: output format is non-existent.");
                 break;
             }
 
@@ -288,7 +288,7 @@ int main (int argc, char *argv[]) {
             store_results_vtk (OutputFileBaseName);
             break;
         default :
-            printf ("ERROR: output format is not existent.");
+            printf ("ERROR: output format is non-existent.");
             break;
         }
 
@@ -309,7 +309,7 @@ int main (int argc, char *argv[]) {
         else {  /* perform some operation that is not simulation */
             switch (cmd_result) {
             case 3 :  /* convert material to element file */
-                printf ("\nYou are using im3d to convert a material based target definition to an element based one.\n\n");
+                printf ("\nYou are using im3d to convert a material-based target definition to an element-based one.\n\n");
 
                 /* init all things, needs to be done to read material file */
                 result = init_configuration (ConfigFileName);
@@ -379,12 +379,13 @@ int display_startup_message () {
         printf ("%s\n%s\n", VERSIONDATE, VERSIONCOMMENT);
         printf ("by Yonggang Li (Y.G. Li), 2014, ygli@theory.issp.ac.cn & ygli@mit.edu;\n");
         printf ("Institute of Solid Status of Physics, Chinese Academy of Sciences;\n");
-        printf ("& Nuclear Science and Engineering, Massachusetts Institute of Technology.\n\n");
+        printf ("and the Department of Nuclear Science and Engineering,\n");
+        printf ("Massachusetts Institute of Technology.\n\n");
         printf ("Refers to:\n  H.M. Li, H.Y. Wang, Y.G. Li & Z.J. Ding*'s CSG/FETM geometry methods;\n");
         printf ("& C. Borschel's OSS 'iradina' and F. Schiettekatte's OSS 'corteo'.\n\n");
         printf ("This program comes with ABSOLUTELY NO WARRANTY.\n");
-        printf ("This is a free software, and you are welcome to redistribute it under\n");
-        printf ("certain conditions, see LICENCE for details.\n");
+        printf ("This is free software, and you are welcome to redistribute it under\n");
+        printf ("certain conditions, see LICENSE for details.\n");
         printf ("************************************************************************\n\n");
     }
 
