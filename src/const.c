@@ -1,7 +1,7 @@
 /******************************************************************************
   Module Name : const.c
   Module Date : 02/26/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : Global physical constants.
 

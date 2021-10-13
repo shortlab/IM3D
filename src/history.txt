@@ -9,7 +9,92 @@ First released version of iran3d.
 
 ----------------------
 Version:   1.0.1
-Released:  2014-Jul-14
+Released:  2014-July-14
 ----------------------
 +
-# some bug fixes
+# some bug fixed
+
+
+----------------------
+Version:   1.0.2
+Released:  2014-Aug-05
+----------------------
+Add the modified Kinchin-Pease Model
+
+
+----------------------
+Version:   1.0.3
+Released:  2014-Aug-21
+----------------------
+Add module vtkwriter: the VTK output file format
+
+
+----------------------
+Version:   1.0.4
+Released:  2014-Sep-03
+----------------------
+Rewrite modules *writer: cfgwriter, mshwriter
+
+
+----------------------
+Version:   1.0.4
+Released:  2014-Nov-10
+----------------------
+Can run on Ubuntu linux system
+
+
+----------------------
+Version:   1.0.4
+Released:  2014-Nov-26
+----------------------
+Named as im3d_static_v1.0
+
+
+----------------------
+Version:   im3d_static_v1.0.1
+Released:  2015-Jan-08
+----------------------
+Revise the replacement rule and can compare to SRIM results;
+Revise some csg shape intersection subroutines.
+
+
+----------------------
+Version:   im3d_static_v1.0.2
+Released:  2015-Jan-25
+----------------------
+Revise the intersection method of ray-triangle, by introducing
+the MT algorithm and making the calculation of normal of triangles
+in the trianglulate module at the begining of calculations.
+
+
+----------------------
+Version:   im3d_static_v1.0.3
+Released:  2015-Feb-27
+----------------------
+Add the radial distribution functions statistics.
+
+
+=======================================================================
+
+----------------------
+Version:   im3d_static_v1.1.0
+Released:  2015-May-12
+----------------------
+The versions after im3d_static_v1.0.3.
+
+
+----------------------
+Version:   im3d_static_v1.1.1
+Released:  2015-May-14
+----------------------
+Add the modulus (aivxyz) of outputting the space-positions (x, y, z) of ions (a),
+interstitials (i) and vacancies (v) in the form of .cfg.
+
+
+----------------------
+Version:   im3d_static_v1.2.0
+Released:  2015-June-29
+----------------------
+Add the modulus (index64), which makes im3d can run on a 64-bit system with
+a 64-bit MPICH library.
+

@@ -1,7 +1,7 @@
 /******************************************************************************
   Module Name : mpimod.h
   Module Date : 04/22/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : MPI parallel module.
 
@@ -35,13 +35,13 @@ int mpi_seed (int seed) {
 =============================================================================*/
 int mpi_init_array (void) {
 
-	  reduce_int_data    = (int*) calloc (cell_count, sizeof (int));
-	  reduce_double_data = (double*) calloc (cell_count, sizeof (double));
+    reduce_int_data    = (int *) calloc (cell_count, sizeof (int));
+    reduce_double_data = (double *) calloc (cell_count, sizeof (double));
 
-	  if (reduce_int_data    == NULL) return -7001;  /* cannot allocate memory */
-	  if (reduce_double_data == NULL) return -7002;  /* cannot allocate memory */
+    if (reduce_int_data    == NULL) return -7001;  /* cannot allocate memory */
+    if (reduce_double_data == NULL) return -7002;  /* cannot allocate memory */
 
-	  return 0;
+    return 0;
 }
 
 /*=============================================================================
@@ -99,7 +99,7 @@ void mpi_reduce_data (void) {
                 ROOT, MPI_COMM_WORLD);
     if (my_node == ROOT) copy_int_array (reduce_int_data, target_total_replacements, cell_count);
 
-	  if (detailed_sputtering == 1) {  /* for detailed calucation of sputtering, we need these */
+	  if (detailed_sputtering == 1) {  /* for detailed calculation of sputtering, we need these */
         MPI_Reduce (target_total_sputtered, reduce_int_data, cell_count, MPI_INT, MPI_SUM,
                     ROOT, MPI_COMM_WORLD);
         if (my_node == ROOT) copy_int_array (reduce_int_data, target_total_sputtered, cell_count);

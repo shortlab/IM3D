@@ -1,5 +1,5 @@
 /******************************************************************************
-  Module Name : index.c
+  Module Name : index64.c
   Module Date : 02/26/2014
   Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
@@ -10,8 +10,9 @@
 
       Revision History:
       Date    Rel Ver.    Notes
+      15/06/30            long to int for for 32-bit to 64-bit;
 ******************************************************************************/
-#include "index.h"
+#include "index64.h"
 
 /*=============================================================================
   X_index: compute an integer index using the binary representation of a
@@ -59,10 +60,10 @@
   Notes :
       Corteo: Adapted from corteoindex.c.
 =============================================================================*/
-unsigned long E_index (float E_val) {
-    unsigned long ll;
+unsigned int E_index (float E_val) {
+    unsigned int ll;
 
-    ll = *(unsigned long *)&E_val;
+    ll = *(unsigned int *)&E_val;
     ll = (ll >> SHIFTE) - BIASE;
 
 #ifdef INDEX_BOUND_CHECKING
@@ -90,10 +91,10 @@ unsigned long E_index (float E_val) {
   Notes :
       Corteo: Adapted from corteoindex.c.
 =============================================================================*/
-unsigned long S_index (float S_val) {
-    unsigned long ll;
+unsigned int S_index (float S_val) {
+    unsigned int ll;
 
-    ll = *(unsigned long *)&S_val;
+    ll = *(unsigned int *)&S_val;
     ll = (ll >> SHIFTS) - BIASS;
 
 #ifdef INDEX_BOUND_CHECKING
@@ -121,10 +122,10 @@ unsigned long S_index (float S_val) {
   Notes :
       Corteo: Adapted from corteoindex.c.
 =============================================================================*/
-unsigned long D_index (float D_val) {
-    unsigned long ll;
+unsigned int D_index (float D_val) {
+    unsigned int ll;
 
-    ll = *(unsigned long *)&D_val;
+    ll = *(unsigned int *)&D_val;
     ll = (ll >> SHIFTD) - BIASD;
 
 #ifdef INDEX_BOUND_CHECKING
@@ -154,9 +155,9 @@ unsigned long D_index (float D_val) {
   Notes :
       Corteo: Adapted from corteoindex.c.
 =============================================================================*/
-float E_val (unsigned long index) {
+float E_val (unsigned int index) {
     float temp1, temp2;
-    unsigned long ll;
+    unsigned int ll;
 
     ll = (index + BIASE) << SHIFTE;
     temp1 = (*(float *)&ll);
@@ -176,9 +177,9 @@ float E_val (unsigned long index) {
   Notes :
       Corteo: Adapted from corteoindex.c.
 =============================================================================*/
-float S_val (unsigned long index) {
+float S_val (unsigned int index) {
     float temp1, temp2;
-    unsigned long ll;
+    unsigned int ll;
 
     ll = (index + BIASS) << SHIFTS;
     temp1 = (*(float *)&ll);
@@ -198,9 +199,9 @@ float S_val (unsigned long index) {
   Notes :
       Corteo: Adapted from corteoindex.c.
 =============================================================================*/
-float D_val (unsigned long index) {
+float D_val (unsigned int index) {
     float temp1, temp2;
-    unsigned long ll;
+    unsigned int ll;
 
     ll = (index + BIASD) << SHIFTD;
     temp1 = (*(float *)&ll);

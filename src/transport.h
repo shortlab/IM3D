@@ -1,7 +1,7 @@
 /******************************************************************************
   Module Name : transport.c
   Module Date : 02/26/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : Contains the functions to simulate the ion transport, etc.
 
@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "iran3d.h"
+#include "im3d.h"
 #include "fileio.h"
 #include "utils.h"
 #include "random.h"
@@ -29,10 +29,13 @@
 #include "init.h"
 #include "material.h"
 #include "matrix.h"
-#include "index.h"
+#include "index64.h"
 #include "const.h"
 #include "magic.h"
-#include "msh.h"
+#include "cfgwriter.h"
+#include "mshwriter.h"
+#include "vtkwriter.h"
+#include "aivxyz.h"
 
 #ifdef MPI_PRALLEL
 /* MPI=============================================== */
@@ -65,9 +68,16 @@ int store_energy_deposit;  /* if 1, array with deposited energy are created and 
 
 int flight_length_type;    /* Flight lengths between collisions can be selected by three
                               different approaches:
-                      0: poisson distributed flight lengths mit average of interatomic spacing;
+                      0: Poisson distributed flight lengths mit average of inter-atomic spacing;
                       1: constant flight length. Is has be be specified in units of nm.
-                      Options 0 ignore the flight_length_constant parameter. */
+                      Options 0 ignore the flight_length_constant parameter.
+                      NOTE: ygli, 2015.1.8
+                            In SRIM, different flight lengths are set for different energy regions,
+                            much longer flight lengths are approximately used to increase the
+                            efficiency of the calculation, which may introduce some errors due to
+                            lower energy loss cost without considering the detailed traces.
+                            When use flight_length_type=0, more detailed traces are considered,
+                            which should introduce more energy loss and less displacements. */
 float flight_length_const;  /* If constant flight length is selected, then this is it (in nm). */
 
 int   max_no_ions;            /* maximum number of ions */
@@ -130,10 +140,11 @@ int max_annular_coll_volumes;  /* According to W.Eckstein "Computer Simulation i
                                   determines the maximum number of collisions. 0 means just 1.
                                   Recommended for sputtering is 2. */
 
+int tracing_recoil_or_not;      /* 1: tracing recoil, 0: only tracing primary ions, KP model, Aug. 05, 2014 */
 int scattering_calculation;     /* 0: corteo database, 1: MAGIC  */
 int transport_type;             /* 0: accurate, 1: Fast (like corteo) */
-int single_ion_sputter_yields;  /* if 1, iran3d will store sputter yields for single ions
-                  (at the moment those are not seperated by type of sputtered particles */
+int single_ion_sputter_yields;  /* if 1, im3d will store sputter yields for single ions
+                  (at the moment those are not separated by type of sputtered particles */
 int *sputter_yield_histogram;   /* array that stores single ion sputter yield histogram */
 #define MAX_SPUTTERED 5000      /* maximum number of sputtered particles per single ion
                                    possible to store */
@@ -143,22 +154,22 @@ int irradiate_target (void);  /* Let ions impinge on the target */
 
 void def_ion_enetry_pos (double *x, double *y, double *z);  /* Define ion entry positions */
 
-/* Calculates the path of a projectile with given porperties (proton number,
-   mass, energy, coordiantes, direction) through the target material.
+/* Calculates the path of a projectile with given properties (proton number,
+   mass, energy, coordinates, direction) through the target material.
    Can be called recursively to follow recoils.
    The proj_state char contains status bits:
-   bit 0: if 1, then the projectile is a recoile which has gained less than
+   bit 0: if 1, then the projectile is a recoil which has gained less than
           its displacement energy. That means it may fly around a little and
           kick other atoms, but it probably jumps back to its original locations.
    bit 1: if 1, the projectile replaced another atom, but is still flying
-          around a bit and creating damage or possibly might try to espace
+          around a bit and creating damage or possibly might try to escape
           from the solid. */
-int projectile_transport (int projZ, float projM, float projE, double proj_x,
+int projectile_transport (int ion_i, int projZ, float projM, float projE, double proj_x,
 	                        double proj_y, double proj_z, double proj_vx, double proj_vy,
                           double proj_vz, int is_ion, int in_or_not, int org_material,
                           int org_element, int org_cell);
 
-int collision (int projZ, float projM, int is_ion, float *energy, double target_x,
+int collision (int ion_i, int projZ, float projM, int is_ion, float *energy, double target_x,
                double target_y, double target_z, double *vx, double *vy, double *vz,
                float impact_par, unsigned int *iazim_angle, int target_material_index,
                int org_material, int org_element, int *replaced, int in_or_not);
@@ -177,7 +188,7 @@ void rotate (double *l, double *m, double *n, unsigned int *iazim_angle,
    n is the surface normal vector and E_surf the surface binding energy.
    The surface vector must point to vacuum!
    returns 0 if projectile went into solid.
-   returns 1 if projectile tried to leave solid and succeded.
+   returns 1 if projectile tried to leave solid and succeed.
    returns 2 if projectile tried to leave solid but did not succeed. */
 int refract_projectile2 (double *vx, double *vy, double *vz, double nx, double ny,
                          double nz, float *energy, float E_surf);

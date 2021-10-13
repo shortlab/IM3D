@@ -1,12 +1,12 @@
 /******************************************************************************
   Module Name : utils.c
   Module Date : 02/26/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : Contains some utility functions.
 
   Others :
-      Error numbers in this file: 4000-4999.
+      Error numbers in this file: 12000-12999.
       Refers to iradina and Corteo.
 
       Revision History:
@@ -17,7 +17,7 @@
 /*=============================================================================
   Function Name : handle_cmd_line_options
   Description   : Handles all command line arguments. Returns a value > 0 in case
-                  the main program should not perform a simultion but something else:
+                  the main program should not perform a simulation but something else:
                   1, 2 : nothing;
                      3 : conversion of material file to element files.
 
@@ -62,7 +62,7 @@ int handle_cmd_line_options (int argc, char *argv[]) {
             }
             else {
 	            printf ("Error: the -c option requires a config file name (of less than 1024 characters)\n");
-	            return -4001;
+	            return -12000;
             }
         }
 
@@ -72,12 +72,12 @@ int handle_cmd_line_options (int argc, char *argv[]) {
             if (i < argc) {
                 if (sscanf (argv[i], "%i", &print_level) != 1) {
 	                printf ("Error: cannot read level of verbosity from command line option -p\n");
-	                return -4002;
+	                return -12001;
 	            }
             }
             else {
 	            printf ("Error: the -p option requires a following integer number!\n");
-	            return -4003;
+	            return -12002;
             }
         }
 
@@ -87,16 +87,16 @@ int handle_cmd_line_options (int argc, char *argv[]) {
             if (i < argc) {
                 if (sscanf (argv[i], "%i", &override_max_ions) !=1 ) {
                     printf ("Error: cannot read level maximum ion number from command line option -n\n");
-                    return -4004;
+                    return -12003;
                 }
             }
             else {
                 printf ("Error: the -n option requires a following integer number!\n");
-                return -4005;
+                return -12004;
             }
         }
 
-        /* option to start iran3d from another prog */
+        /* option to start im3d from another prog */
         if (strcmp (argv[i], "-g") == 0) {
             i++;
             if (i < argc) {
@@ -107,7 +107,7 @@ int handle_cmd_line_options (int argc, char *argv[]) {
             }
             else {
                 printf ("Error: the -g option requires a following string!\n");
-                return -4006;
+                return -12005;
             }
         }
 
@@ -117,12 +117,12 @@ int handle_cmd_line_options (int argc, char *argv[]) {
             if (i < argc) {
                 if (sscanf (argv[i], "%f", &override_energy) != 1) {
                     printf ("Error: cannot read override energy from option -E\n");
-                    return -4007;
+                    return -12006;
                 }
             }
             else {
                 printf ("Error: the -E option requires a following float number!\n");
-                return -4008;
+                return -12007;
             }
         }
 
@@ -152,7 +152,7 @@ int handle_cmd_line_options (int argc, char *argv[]) {
             else {
                 printf ("Error: the -conv option requires an output file name (of less than 1024 characters),\n");
                 printf ("where the element definition will be stored.\n");
-                return -4009;
+                return -12008;
             }
         }
 
@@ -175,7 +175,7 @@ int handle_cmd_line_options (int argc, char *argv[]) {
   Notes : no.
 =============================================================================*/
 int print_help_text (void) {
-    printf ("Usage: iran3d [OPTIONS]\n");
+    printf ("Usage: im3d [OPTIONS]\n");
     printf (" Available options: \n");
     printf (" -h            print this help\n");
     printf (" -l            display license\n");
@@ -194,7 +194,7 @@ int print_help_text (void) {
       printf("               file. If the input file is combined, then the output file\n");
       printf("               will also be combined and written to FILE. Otherwise, the\n");
       printf("               elements are stored in FILE and '.e' is appended to the\n");
-      printf("               new compositon file name.\n");
+      printf("               new composition file name.\n");
       printf(" -convsep      Should only be used with conv. Create separate elements for\n");
       printf("               each material.\n"); */
 
@@ -203,7 +203,7 @@ int print_help_text (void) {
 
 /*=============================================================================
   Function Name : make_int_array
-  Description   : Read comma-seprated values from string and put them into the
+  Description   : Read comma-separated values from string and put them into the
                   int array, which has #count entries.
                   The int array must exist already.
 
@@ -220,7 +220,7 @@ int make_int_array (char *values, int count, int *i_array) {
 
     temp = (char*) malloc (sizeof (char)*32);
     temp = strtok (values, ",");
-    if (strlen(values) < 1) return -4010;  /* for safety reasons */
+    if (strlen(values) < 1) return -12009;  /* for safety reasons */
     sscanf (temp, "%i", &(i_array[0]));
     while (((temp=strtok(NULL,","))!=NULL) && (i<count)){
         sscanf (temp, "%i", &(i_array[i]));
@@ -232,7 +232,7 @@ int make_int_array (char *values, int count, int *i_array) {
 
 /*=============================================================================
   Function Name : make_float_array
-  Description   : Read comma-seprated values from string and put them into the
+  Description   : Read comma-separated values from string and put them into the
                   float array, which has #count entries.
                   The float array must exist already.
 
@@ -345,7 +345,7 @@ void calculate_normalization_factor (int num_of_ions) {
   Function Name : get_leaving_direction
   Description   : Get ions/target atoms leaving direction.
 
-  Inputs  : float vx, flaot vy, float vz
+  Inputs  : float vx, float vy, float vz
   Outputs : leaving_direction
 
   Notes : no.
@@ -369,8 +369,8 @@ int get_leaving_direction (double vx, double vy, double vz) {
 
 /*=============================================================================
   Function Name : write_status_file
-  Description   : Create a file that hols status information on iran3D.
-                  Can be used to monitor iran3d's status from another program.
+  Description   : Create a file that hold status information on im3D.
+                  Can be used to monitor im3d's status from another program.
 
   Inputs  :
             char* status_text
@@ -384,10 +384,10 @@ int write_status_file (char *status_text, int ion_number) {
 
     f_pointer = fopen ("ir_state.dat", "w");
     if (f_pointer == NULL) {
-        return -4011;
+        return -12010;
     }
     else {
-        fprintf (f_pointer, "iran3d %i.%i.%i\n", VERSION, SUBVERSION, SUBSUBVERSION);
+        fprintf (f_pointer, "im3d %i.%i.%i\n", VERSION, SUBVERSION, SUBSUBVERSION);
         fprintf (f_pointer, "%s\n", start_id_string);
         fprintf (f_pointer, "%s\n", status_text);
         fprintf (f_pointer, "%i\n", ion_number);
@@ -426,8 +426,11 @@ void get_float_one_bit_smaller (float *flt_input, float *flt_output) {
       Corteo: Adapted from corteoutil.c.
 =============================================================================*/
 void ignore_line (FILE *ifp) {
-    fscanf (ifp, "%*[^\n]");
-    fscanf (ifp, "%*1[\n]");
+    int iscan;
+
+    iscan = fscanf (ifp, "%*[^\n]");
+    iscan = fscanf (ifp, "%*1[\n]");
+    if (iscan < 0) printf ("Error: ignore_line_fscanf.");
 }
 
 /*=============================================================================
@@ -492,10 +495,10 @@ float a2f (char *s) {
       WARNING: approximate solution, precise to 0.0015%, use when precision
                is not critical.
 =============================================================================*/
-float fast_sqrt (float val) {
-    if (*(unsigned long *)&val==0) return 0.0f;
-    return sqrt_table[((*(unsigned long *)&val)>>7)&0xFFFF]
-         * sqrt_table_exp[((*(unsigned long *)&val)>>23)&0xFF];
+float fast_sqrt (float val) {  /* long to int for 32-bit to 64-bit */
+    if (*(unsigned int *)&val==0) return 0.0f;
+    return sqrt_table[((*(unsigned int *)&val)>>7)&0xFFFF]
+         * sqrt_table_exp[((*(unsigned int *)&val)>>23)&0xFF];
 }
 
 /*=============================================================================
@@ -511,11 +514,11 @@ float fast_sqrt (float val) {
 
   Notes : no.
 =============================================================================*/
-float inv_sqrt (float val) {
+float inv_sqrt (float val) {  /* long to int for 32-bit to 64-bit */
 
-    if ((*(unsigned long *)&val) == 0) return 1.0f / val;  // prevent division by 0
-    return inv_sqrt_table[((*(unsigned long *)&val)>>7)&0xFFFF]
-         * inv_sqrt_table_exp[((*(unsigned long *)&val)>>23)&0xFF];
+    if ((*(unsigned int *)&val) == 0) return 1.0f / val;  // prevent division by 0
+    return inv_sqrt_table[((*(unsigned int *)&val)>>7)&0xFFFF]
+         * inv_sqrt_table_exp[((*(unsigned int *)&val)>>23)&0xFF];
 }
 
 /*=============================================================================
@@ -555,7 +558,7 @@ void mat_mul2 (double a[][3], double b[], double c[]) {
     for (i=0; i<3; i++) {
         c[i] = 0;
         for (j=0; j<3; j++) {
-            c[i] += a[i][j] * b[i];
+            c[i] += a[i][j] * b[j];  /* b[i] -> b[j], 01/28/2015 */
         }
     }
 

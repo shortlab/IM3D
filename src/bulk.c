@@ -1,11 +1,13 @@
 /******************************************************************************
   Module Name : bulk.c
   Module Date : 04/24/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : Bulk or multi-layer samples.
 
   Others :
+      Error numbers in this module 8000-8999.
+
       Revision History:
       Date    Rel Ver.    Notes
 ******************************************************************************/
@@ -13,24 +15,25 @@
 
 /*=============================================================================
   Function Name : read_csg_shape
-  Description   : Read bulk shape parameters form Config file.
+  Description   : Read bulk shape parameters form Config.in file.
 
-  Inputs  : char* file_name
+  Inputs  : char *file_name
   Outputs : no.
 
   Notes : no.
 =============================================================================*/
 int read_bulk_shape (char *file_name) {
-	int i;
+	int i, iscan;
 
     shape_file = fopen (file_name, "rt");  /* TargetCompositionFileName */
     if (shape_file == NULL) {
-        printf ("Error: File '%s' cannot be opend for reading.\n",
+        printf ("Error: File '%s' cannot be opened for reading.\n",
                  TargetCompositionFileName);
-    	return -1000;
+    	return -8000;
     }
 
-    fscanf (shape_file, "%3i", &max_no_layers);
+    iscan = fscanf (shape_file, "%3i", &max_no_layers);
+    if (iscan < 0) return -8001;
 #ifdef MPI_PRALLEL
     /* MPI=============================================== */
     if (my_node == ROOT) printf ("\nMax number of layers: %i\n", max_no_layers);
@@ -38,10 +41,10 @@ int read_bulk_shape (char *file_name) {
 #else
     printf ("\nMax number of layers: %i\n", max_no_layers);
 #endif
-    if (max_no_layers >= 20) {
-	    printf ("Error: Number of layers (%2i) in bulk materials is no more than 20!",
+    if (max_no_layers >= 200) {  /* 20 -> 200 */
+	    printf ("Error: Number of layers (%2i) in bulk materials is no more than 200!",
                  max_no_layers);
-        return -1100;
+        return -8002;
     }
 
     sect[0] = 0.0;  /* vacuum */
@@ -56,8 +59,9 @@ int read_bulk_shape (char *file_name) {
     material_of_layer[max_no_layers+1] = 1;  /* half-infinite substrate */
     thick_of_layer[0] = sub_surf_z;
     for (i=1; i<=max_no_layers; i++) {
-    	fscanf (shape_file, "%i",  &material_of_layer[i]);
-        fscanf (shape_file, "%lf", &thick_of_layer[i]);
+    	iscan = fscanf (shape_file, "%i",  &material_of_layer[i]);
+        iscan = fscanf (shape_file, "%lf", &thick_of_layer[i]);
+        if (iscan < 0) return -8003;
 
         if (material_of_layer[i] == 0) {
         	sect[i] = 0.0;

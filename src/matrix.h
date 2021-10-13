@@ -1,7 +1,7 @@
 /******************************************************************************
   Module Name : matrix.h
   Module Date : 02/26/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : Scattering matrix: sin^2(theta_CM/2).
 
@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "index.h"
+#include "index64.h"
 #include "const.h"
 #include "utils.h"
 
@@ -70,8 +70,8 @@ struct scattering_matrix scattering_matrices[MAX_ELEMENT_NO][MAX_ELEMENT_NO];
 /*-----------------------------Functions-----------------------------*/
 int calc_matrix (unsigned int screening_type, int show_progress, char *file_name);
 int load_matrix (char file_name[]);
-float matrix_i (unsigned long i);
-void set_matrix (unsigned long i, float val);
+float matrix_i (unsigned int i);  /* long to int for 32-bit to 64-bit */
+void set_matrix (unsigned int i, float val);  /* long to int for 32-bit to 64-bit */
 double cal_theta (double epsilon, double s, unsigned int nsum);
 
 /*Creates the matrix with scattering results and stores it to the structure pointed to by ScatMatrix*/

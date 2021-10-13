@@ -1,7 +1,7 @@
 /******************************************************************************
   Module Name : target.h
   Module Date : 02/26/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : Main program.
 
@@ -19,14 +19,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "iran3d.h"
+#include "im3d.h"
 #include "fileio.h"
 #include "utils.h"
 #include "transport.h"
 #include "material.h"
 #include "csg.h"
 #include "fetm.h"
-#include "msh.h"
+#include "mshwriter.h"
 
 #ifdef MPI_PRALLEL
 /* MPI=============================================== */
@@ -47,7 +47,7 @@
   as well as a compound.
   The target consists of (possibly a large number of) little cells. Each of
   these is filled with one of the defined materials.
-  Alternatively, for the dynamic version, a number of seperate elements are
+  Alternatively, for the dynamic version, a number of separate elements are
   defined. Each cell has a composition vector describing the fractions of
   each element in that cell. This is called element-based in contrast to
   "material-based".
@@ -82,7 +82,7 @@
   So, it is convenient for the case of only one special region included(Materials+1).
   For the case of many special structures included in the CSG method, still
   only one special region is included, for the regions without CSG structures
-  are also definded as substrate.
+  are also defined as substrate.
   Statistic in substrate region can be counted with a increasing non-uniform mesh.
   Different ions and defects can be saved as their exact coordinates.
 ======================================================================*/
@@ -93,6 +93,7 @@ int gen_shape_or_not;  /* 1 - generate fetm shape file for fetm geometry */
 int cell_count_x;      /* number of cells in x-direction (>=1) */
 int cell_count_y;      /* number of cells in y-direction (>=1) */
 int cell_count_z;      /* number of cells in z-direction (>=1) */
+int cell_max_xy;       /* max_r = (int) (sqrt (cell_count_x^2 + cell_count_y^2)) + 1 */
 int layer_count_yz;    /* layer_count_xy = cell_count_x * cell_count_y,
                           still use layer_count_yz is in order to make
                           output in style of (x, y, z, value) */
@@ -132,11 +133,11 @@ int target_composition_file_type;   /* The file which hold the info of what mate
                                        values, which are indexed like the TargetIndexFunction does;
                                        or: four columns with x,y,z values and the material index */
 
-double *target_energy_phonons;      /* all energy deposited into the phononic system */
+double *target_energy_phonons;      /* all energy deposited into the phonetic system */
 double *target_energy_electrons;    /* all energy deposited by electronic stopping.
     Note: these two arrays must be of type double, because small values might be added to
           gigantic number, and should not be lost (happens for large number of ions and
-          high energys. Doubles reduce this risk as compared to floats) */
+          high energy. Doubles reduce this risk as compared to floats) */
 
 /* depth distribution statistics */
 int   *target_depth_implanted_ions;
@@ -149,13 +150,24 @@ int   *target_depth_total_interstitials;
 double *target_depth_energy_phonons;
 double *target_depth_energy_electrons;
 
+/* radial distribution statistics */
+int   *target_radial_implanted_ions;
+int   *target_radial_replacing_ions;
+int   *target_radial_total_vacancies;
+int   *target_radial_total_replacements;
+int   *target_radial_total_displacements;
+int   *target_radial_total_interstitials;
+
+double *target_radial_energy_phonons;
+double *target_radial_energy_electrons;
+
 /*-----------------------------Functions-----------------------------*/
 /* read target structure (size etc.) from config file and reads target concentration array etc.*/
 int init_target_structure (char *file_name);
 
-/* needs to be called from the ini file reader while the traget structure input file is read */
+/* needs to be called from the init file reader while the target structure input file is read */
 int read_target_structure_data_block (char *block_name);
-/* Needs to be called from the ini file reader while the target structure input file is read */
+/* Needs to be called from the init file reader while the target structure input file is read */
 int read_target_structure_data (char *par_name, char *par_value);
 
 /* calculates index for accessing one-dimensional target arrays knowing
@@ -169,7 +181,7 @@ void get_target_XYZ (int index, int *x, int *y, int *z);
 /* Calculates the relative x,y,z coordinates (unit: traget_size) for a given position */
 void get_relative_XYZ (int x, int y, int z, float *rx, float *ry, float *rz);
 
-/* calcualtes index for accessing one-dimensional target arrays from a
+/* calculates index for accessing one-dimensional target arrays from a
    float-value point in space */
 int get_cell_index (double x, double y, double z, int *cell_i);
 

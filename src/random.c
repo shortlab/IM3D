@@ -1,7 +1,7 @@
 /******************************************************************************
   Module Name : random.h
   Module Date : 02/26/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description :
 
@@ -85,14 +85,14 @@ void compute_lists (void) {
         log_list[ilog_list] = - log ((ilog_list + .5) / MAXLOGLIST);
     randomize_list (log_list, MAXLOGLIST);  /* put the list in random order */
 
-    /* precompute 1/sqrtloglist[] */
+    /* pre-compute 1/sqrtloglist[] */
     for (ilog_list=0; ilog_list<MAXLOGLIST; ilog_list++)
         /* important modification, sqrt_log_list -> log_list */
         inv_sqrt_log_list[ilog_list] = 1.0f / sqrtdf (log_list[ilog_list]);
 
-    /* produce a list uniformly distributed but randomly ordered azimutal angles  */
+    /* produce a list uniformly distributed but randomly ordered azimuthal angles  */
     for (iazim_angle=0; iazim_angle<MAXAZILIST; iazim_angle++)
-        /* cos_azim_angle temporarly contains angles */
+        /* cos_azim_angle temporary contains angles */
         cos_azim_angle[iazim_angle] = 2.0f * (float) PI * (float) (iazim_angle)
                                     / (float) (MAXAZILIST);
     randomize_list (cos_azim_angle, MAXAZILIST);  /* put the list in random order */

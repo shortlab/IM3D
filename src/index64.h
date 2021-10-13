@@ -1,5 +1,5 @@
 /******************************************************************************
-  Module Name : index.h
+  Module Name : index64.h
   Module Date : 02/26/2014
   Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
@@ -11,6 +11,7 @@
       Revision History:
       Date    Rel Ver.    Notes
       04/29/14            add corteo.mat in version_130715;
+      15/06/30            long to int for for 32-bit to 64-bit;
 ******************************************************************************/
 #ifndef INDEX_H
 #define INDEX_H
@@ -65,16 +66,16 @@
 /*--------------------------Global variables-------------------------*/
 /* global variables: number of errors during index function calls
    (in work if INDEX_BOUND_CHECKING is defined) */
-unsigned long E_min_err, E_max_err, S_min_err, S_max_err, D_min_err, D_max_err;
+unsigned int E_min_err, E_max_err, S_min_err, S_max_err, D_min_err, D_max_err;
 
 /* functions that compute an index from a value */
-unsigned long E_index (float E_val);
-unsigned long S_index (float S_val);
-unsigned long D_index (float D_val);
+unsigned int E_index (float E_val);
+unsigned int S_index (float S_val);
+unsigned int D_index (float D_val);
 
 /* functions that return the value corresponding to an index */
-float E_val (unsigned long index);
-float S_val (unsigned long index);
-float D_val (unsigned long index);
+float E_val (unsigned int index);
+float S_val (unsigned int index);
+float D_val (unsigned int index);
 
 #endif

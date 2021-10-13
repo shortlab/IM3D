@@ -1,7 +1,7 @@
 /******************************************************************************
   Module Name : material.c
   Module Date : 02/26/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : Contains the material-related functions, etc.
 
@@ -43,7 +43,7 @@ int init_materials (char *file_name) {
 #ifndef MPI_PRALLEL
     /* MPI=============================================== */
     int   number_exist_element;  /* number of existing elements */
-    unsigned long int lui_temp;
+    unsigned int lui_temp;  /* long to int for 32-bit to 64-bit */
     /* MPI=============================================== */
 #endif
     float temp;
@@ -63,7 +63,7 @@ int init_materials (char *file_name) {
 
     /* loop through materials, for each:
        - normalize elemental concentrations to 1,
-       - calculate mean interatomic distance,
+       - calculate mean inter-atomic distance,
        - calculate maximum impact parameter (not reduced one),
        - determine elements existing in target.
     */
@@ -71,7 +71,7 @@ int init_materials (char *file_name) {
     for (i=0; i<number_of_materials; i++) {
         temp = 0;
         list_of_materials[i].cell_count = 0;
-        for (k=0; k<(MAX_EL_PER_MAT*8); k++)  /* reset sputtercounters: */
+        for (k=0; k<(MAX_EL_PER_MAT*8); k++)  /* reset sputter-counters: */
             list_of_materials[i].sputter_counter[k] = 0;
         for (j=0; j<list_of_materials[i].element_count; j++) {
             /* Sum up. Also indicate that this element exists in the target. */
@@ -113,15 +113,20 @@ int init_materials (char *file_name) {
 
         list_of_materials[i].mean_Z = 0;
         list_of_materials[i].mean_M = 0;
+        list_of_materials[i].mean_Ed = 0;  /* Modified Kinchin-Pease Model, Aug. 05, 2014 */
 
-        /* go through elements, normalize concentration, check for hydorgen existence*/
+        /* go through elements, normalize concentration, check for hydrogen existence*/
         for (j=0; j<list_of_materials[i].element_count; j++) {
             list_of_materials[i].elements_conc[j] = list_of_materials[i].elements_conc[j] / temp;
             /* calculate average M,Z */
             list_of_materials[i].mean_Z += list_of_materials[i].elements_conc[j]
-                                      * list_of_materials[i].elements_Z[j];
+                                         * list_of_materials[i].elements_Z[j];
             list_of_materials[i].mean_M += list_of_materials[i].elements_conc[j]
-                                      * list_of_materials[i].elements_M[j];
+                                         * list_of_materials[i].elements_M[j];
+            /* Modified Kinchin-Pease Model, Aug. 05, 2014 */
+            list_of_materials[i].mean_Ed += list_of_materials[i].elements_conc[j]
+                                          * list_of_materials[i].elements_disp_energy[j];
+
             /* Hydrogen is really within target! */
             if (list_of_materials[i].elements_Z[j] == 1) hydrogen_in_target = 1;
             /* An element like the ion is within target! */
@@ -154,7 +159,7 @@ int init_materials (char *file_name) {
             sqrtdf (PI * list_of_materials[i].density_NM * list_of_materials[i].atomic_distance);
         /* Later, we need to multiply this by:
            1. sqrt of a random number between 0 and 1   "r2" in corteo manual, select impact par randomly
-           2. 1/ln(-random)                             "r1" selects flight length according to poisson statistics
+           2. 1/ln(-random)                             "r1" selects flight length according to Poisson statistics
            3. 1/screening_length                         to get reduced quantity
            in order to get the actual reduced impact parameter */
     }
@@ -192,6 +197,16 @@ int init_materials (char *file_name) {
             return result;
         }
 
+        /* Modified Kinchin-Pease model, Aug. 5, 2014 */
+        if (tracing_recoil_or_not == 0) {
+            //result = prepare_KP_tables1 ();
+            result = prepare_KP_tables2 ();
+            if (result != 0) {
+                printf ("Error: Cannot create Kinchin-Pease tables!\n");
+                return result;
+            }
+        }
+
         /* Go through possible target element and create scattering matrices for
 	       scattering of ion from each target element. */
 #ifdef MPI_PRALLEL
@@ -224,7 +239,11 @@ int init_materials (char *file_name) {
         }
 #ifdef MPI_PRALLEL
         /* MPI=============================================== */
-        if (my_node==ROOT && print_level>=0) printf (" finished\n"); fflush (stdout);
+        if (my_node==ROOT && print_level>=0)
+	{						// 2021-10-04 Added braces - MPS
+		printf (" finished\n");
+		fflush (stdout);
+	}
         /* MPI=============================================== */
 #else
         if (print_level >= 0) printf (" finished\n"); fflush (stdout);
@@ -284,7 +303,11 @@ int init_materials (char *file_name) {
         }
 #ifdef MPI_PRALLEL
         /* MPI=============================================== */
-        if (my_node==ROOT && print_level>=0) printf (" finished\n"); fflush(stdout);
+        if (my_node==ROOT && print_level>=0)
+	{					// 2021-10-04 Added braces - MPS
+		printf (" finished\n");
+		fflush(stdout);
+	}
         /* MPI=============================================== */
 #else
         if (print_level >= 0) printf (" finished\n"); fflush(stdout);
@@ -328,7 +351,7 @@ int init_materials (char *file_name) {
 
 /*=============================================================================
   Function Name : read_materials_data_block
-  Description   : Needs to be called from the ini file reader while the materials
+  Description   : Needs to be called from the init file reader while the materials
                   input file is read and the definition of a new material begins.
 
   Inputs  : char* material_name
@@ -344,7 +367,7 @@ int read_materials_data_block (char *material_name) {
         return -2002;
     }
 
-    /* make sure, that materialname is not to long, i.e. cut it if it is */
+    /* make sure, that material-name is not to long, i.e. cut it if it is */
     if (strlen (material_name) >= 25) material_name[24] = '\0';
 
     strcpy (list_of_materials[number_of_materials].name, material_name);  /* store Name */
@@ -367,7 +390,7 @@ int read_materials_data_block (char *material_name) {
 
 /*=============================================================================
   Function Name : read_materials_data
-  Description   : Needs to be called from the ini file reader while the materials
+  Description   : Needs to be called from the init file reader while the materials
                   input file is read.
 
   Inputs  :
@@ -384,7 +407,7 @@ int read_materials_data (char *par_name, char *par_value) {
 
     /* Compare the parameter name to known parameters and then read in corresponding value */
 
-    if (strcmp (par_name, "ElementCount") == 0) {  /* read number of element into the
+    if (strcmp (par_name, "element_count") == 0) {  /* read number of element into the
                                                      current material */
         sscanf (par_value,"%i", &(list_of_materials[number_of_materials-1].element_count));
 #ifdef MPI_PRALLEL
@@ -399,7 +422,7 @@ int read_materials_data (char *par_name, char *par_value) {
                     list_of_materials[number_of_materials-1].element_count);
 #endif
     }
-    if (strcmp (par_name, "Density") == 0) {  /*  */
+    if (strcmp (par_name, "density") == 0) {  /*  */
         sscanf (par_value, "%f", &(list_of_materials[number_of_materials-1].density));
         if (isnan (list_of_materials[number_of_materials-1].density))
             list_of_materials[number_of_materials-1].density = 0.0;
@@ -413,25 +436,25 @@ int read_materials_data (char *par_name, char *par_value) {
             printf ("Density:\t\t%g\n", list_of_materials[number_of_materials-1].density);
 #endif
     }
-    if (strcmp (par_name,"ElementsZ") == 0)  /* read list of integer Z values*/
+    if (strcmp (par_name,"elements_Z") == 0)  /* read list of integer Z values*/
         if (make_int_array (par_value, MAX_EL_PER_MAT,
             list_of_materials[number_of_materials-1].elements_Z) != 0) return -2004;
-    if (strcmp (par_name, "ElementsM") == 0)  /* read list of mass values*/
+    if (strcmp (par_name, "elements_M") == 0)  /* read list of mass values*/
         if (make_float_array (par_value, MAX_EL_PER_MAT,
             list_of_materials[number_of_materials-1].elements_M) != 0) return -2005;
-    if (strcmp (par_name, "ElementsConc") == 0)  /* read list of concentrations */
+    if (strcmp (par_name, "elements_conc") == 0)  /* read list of concentrations */
         if (make_float_array(par_value,MAX_EL_PER_MAT,
             list_of_materials[number_of_materials-1].elements_conc) != 0) return -2006;
-    if (strcmp (par_name, "ElementsDispEnergy") == 0)  /* read list of displacement energies */
+    if (strcmp (par_name, "elements_disp_energy") == 0)  /* read list of displacement energies */
         if (make_float_array (par_value, MAX_EL_PER_MAT,
             list_of_materials[number_of_materials-1].elements_disp_energy) != 0) return -2007;
-    if (strcmp (par_name, "ElementsLattEnergy") == 0)  /* read list of lattice energies */
+    if (strcmp (par_name, "elements_latt_energy") == 0)  /* read list of lattice energies */
         if (make_float_array (par_value, MAX_EL_PER_MAT,
             list_of_materials[number_of_materials-1].elements_latt_energy) != 0) return -2008;
-    if (strcmp (par_name, "ElementsSurfEnergy") == 0)  /* read list of surface binding energies */
+    if (strcmp (par_name, "elements_surf_energy") == 0)  /* read list of surface binding energies */
         if (make_float_array(par_value, MAX_EL_PER_MAT,
             list_of_materials[number_of_materials-1].elements_surf_energy) != 0) return -2009;
-    if (strcmp (par_name, "IonSurfEnergy") == 0) {  /* read ion surface binding energy */
+    if (strcmp (par_name, "ion_surf_energy") == 0) {  /* read ion surface binding energy */
         sscanf (par_value,"%f", &(list_of_materials[number_of_materials-1].ion_surf_energy));
 #ifdef MPI_PRALLEL
         /* MPI=============================================== */
@@ -446,6 +469,7 @@ int read_materials_data (char *par_name, char *par_value) {
 
     return 0;
 }
+
 /*=============================================================================
   Function Name : prepare_stopping_tables
   Description   : Read stopping data from file and fill arrays etc.
@@ -477,11 +501,11 @@ int prepare_stopping_tables (void) {
                 list_of_materials[i].stopping_ZE[j] = (float*) calloc (MAX_STOPPING_ENTRIES, sizeof (float));
                 if (list_of_materials[i].stopping_ZE[j] == NULL) return -2011;
 
-                /* ok, now we can load the stopping table from the file */
+                /* OK, now we can load the stopping table from the file */
                 /* the following code to do this is adapted from the corteo code */
                 sprintf (StoppingFileName, "data/%u.asp", j);  /* filename where stopping data are tabulated */
 
-                /* for all elements occuring in the current material, we need to load
+                /* for all elements occurring in the current material, we need to load
                    the stopping data and then apply a rule for stopping in compounds */
                 /* go through elements of target material */
                 for (k=0; k<list_of_materials[i].element_count; k++) {
@@ -541,14 +565,14 @@ int prepare_stopping_tables (void) {
 
   Notes :
       Function call:
-        fromcorteo - float Dval (unsigned long index);
-                     unsigned long D_index (float val);
+        fromcorteo - float Dval (unsigned int index);
+                     unsigned int D_index (float val);
                      loat d2f (double val);
                      loat sqrtdf (double val).
 =============================================================================*/
 int prepare_straggling_tables (int model) {
     int i, Z, k, l;  /* projectile's Z */
-    unsigned long ii;
+    unsigned int ii;  /* long to int for 32-bit to 64-bit */
 
     double straggling;
     double stragg_element;
@@ -556,7 +580,7 @@ int prepare_straggling_tables (int model) {
     double energy;
     double MEV_energy_amu;
     double chargestate2;  /* the effective charge state of current projectile */
-    double mass;  /* mass of most abundany isotope of projectile Z */
+    double mass;  /* mass of most abundant isotope of projectile Z */
     int    target_Z;
     double omega_Bohr2;
     double Chu_factor;  /* Chu's correction factor for the Bohr straggling */
@@ -662,6 +686,172 @@ int prepare_straggling_tables (int model) {
 }
 
 /*=============================================================================
+  Function Name : prepare_KP_tables
+  Description   : Modified Kinchin-Pease model, Material version.
+
+  Inputs  : no.
+  Outputs : no.
+
+  Notes :
+      Added on Aug. 05, 2014.
+=============================================================================*/
+int prepare_KP_tables1 (void) {
+    int i, j;
+    double target_Z, target_M, target_Ed, energy, k_d, g_ed, e_d, E_v, E_c;
+
+    for (i=0; i<number_of_materials; i++) {
+        //list_of_materials[i].Nd = (float*) malloc (sizeof (float) * MAX_STOPPING_ENTRIES);
+        list_of_materials[i].Nd = (float*) calloc (MAX_STOPPING_ENTRIES, sizeof (float));
+        if (list_of_materials[i].Nd == NULL) return -2016;
+
+        target_Z = list_of_materials[i].mean_Z;
+        target_M = list_of_materials[i].mean_M;
+        target_Ed = list_of_materials[i].mean_Ed;
+        E_c = 2.5 * target_Ed;
+
+        for(j=0; j<DIMD; j++) {  /* go through table that has to be filled */
+            energy = D_val (j);  /* energy corresponding to index j */
+
+            k_d = 0.133745 * pow (target_Z, 2.0 / 3.0) / pow (target_M, 0.5);
+
+            e_d = 0.0115 * pow (target_Z, -7.0 / 3.0) * energy;
+            g_ed = 3.4008 * pow (e_d, 1.0 / 6.0) + 0.40244 * pow (e_d, 0.75) + e_d;
+
+            E_v = energy / (1.0 + k_d * g_ed);
+
+            if (E_v < target_Ed) {
+                list_of_materials[i].Nd[j] = 0.0;
+            }
+            else if (E_v >= target_Ed && E_v < E_c) {
+                list_of_materials[i].Nd[j] = 1.0;
+            }
+            else if (E_v >= E_c) {
+                list_of_materials[i].Nd[j] = E_v / E_c;
+            }
+            //printf ("0000: %f\n", list_of_materials[i].Nd[j]);
+        }
+    }
+
+    return 0;
+}
+
+/*=============================================================================
+  Function Name : prepare_KP_tables
+  Description   : Modified Kinchin-Pease model, Material version.
+
+  Inputs  : no.
+  Outputs : no.
+
+  Notes :
+      Wrong!!!
+      Added on Aug. 05, 2014.
+=============================================================================*/
+//int prepare_KP_tables2 (void) {
+//    int i, j, k;
+//    double target_Z, target_M, target_Ed, energy, k_d, g_ed, e_d, E_v, E_c;
+
+//    for (i=0; i<number_of_materials; i++) {
+//        list_of_materials[i].Nd = (float*) malloc (sizeof (float) * MAX_STOPPING_ENTRIES);
+//        if (list_of_materials[i].Nd == NULL) return -2111;
+//
+//        for (j=0; j<list_of_materials[i].element_count; j++) {
+//            target_Z = list_of_materials[i].elements_Z[j];
+//            target_M = list_of_materials[i].elements_M[j];
+//            target_Ed = list_of_materials[i].elements_disp_energy[j];
+//            E_c = 2.5 * target_Ed;
+
+//            for(k=0; k<DIMD; k++) {  /* go through table that has to be filled */
+//                energy = D_val (k);  /* energy corresponding to index j */
+
+//                k_d = 0.133745 * pow (target_Z, 2.0 / 3.0) / pow (target_M, 0.5);
+
+//                e_d = 0.0115 * pow (target_Z, -7.0 / 3.0) * energy;
+//                g_ed = 3.4008 * pow (e_d, 1.0 / 6.0) + 0.40244 * pow (e_d, 0.75) + e_d;
+
+//                E_v = energy / (1.0 + k_d * g_ed);
+
+//                if (E_v < target_Ed) {
+//                    list_of_materials[i].Nd[k] += 0.0;
+//                }
+//                else if (E_v >= target_Ed && E_v < E_c) {
+//                    list_of_materials[i].Nd[k] += list_of_materials[i].elements_conc[j];
+//                }
+//                else if (E_v >= E_c) {
+//                    list_of_materials[i].Nd[k] += (E_v / E_c) * list_of_materials[i].elements_conc[j];
+//                }
+                //printf ("0000: %f\n", list_of_materials[i].Nd[k]);
+//            }
+//        }
+//    }
+
+//    return 0;
+//}
+
+/*=============================================================================
+  Function Name : prepare_KP_tables
+  Description   : Modified Kinchin-Pease model, Material version.
+
+  Inputs  : no.
+  Outputs : no.
+
+  Notes :
+      Z_1 and Z_2, M_1 and M_2.
+      Added on Aug. 13, 2014.
+=============================================================================*/
+int prepare_KP_tables2 (void) {
+    int i, j, k, l;
+    double project_Z, project_M, target_Z, target_M, target_Ed, energy, k_d,
+           g_ed, aa, e_d, E_v, E_c;
+
+    for (i=0; i<number_of_materials; i++) {
+        list_of_materials[i].Nd_Z = (float**) calloc (list_of_materials[i].element_count, sizeof (float*));
+        //list_of_materials[i].Nd_Z = (float**) malloc (sizeof (float*) * list_of_materials[i].element_count);
+        if (list_of_materials[i].Nd_Z == NULL) return -2017;
+
+        for (j=0; j<list_of_materials[i].element_count; j++) {
+            project_Z = list_of_materials[i].elements_Z[j];
+            project_M = list_of_materials[i].elements_M[j];
+
+            list_of_materials[i].Nd_Z[j] = (float*) malloc (sizeof (float) * MAX_STOPPING_ENTRIES);
+            if (list_of_materials[i].Nd_Z == NULL) return -2018;
+
+
+            for (k=0; k<list_of_materials[i].element_count; k++) {
+                target_Z = list_of_materials[i].elements_Z[k];
+                target_M = list_of_materials[i].elements_M[k];
+                target_Ed = list_of_materials[i].elements_disp_energy[k];
+                E_c = 2.5 * target_Ed;
+
+                for(l=0; l<DIMD; l++) {  /* go through table that has to be filled */
+                    energy = D_val (l);  /* energy corresponding to index j */
+
+                    k_d = 0.133745 * pow (project_Z, 2.0 / 3.0) / pow (project_M, 0.5);
+
+                    aa = 0.0325 * pow (pow (project_Z, 2.0 / 3.0) + pow (target_Z, 2.0 / 3.0), -0.5);
+                    e_d = target_M * energy / (project_M + target_M) * aa / (project_Z * target_Z);
+                    g_ed = 3.4008 * pow (e_d, 1.0 / 6.0) + 0.40244 * pow (e_d, 0.75) + e_d;
+
+                    E_v = energy / (1.0 + k_d * g_ed);
+
+                    if (E_v < target_Ed) {
+                        list_of_materials[i].Nd_Z[j][l] += 0.0;
+                    }
+                    else if (E_v >= target_Ed && E_v < E_c) {
+                        list_of_materials[i].Nd_Z[j][l] += list_of_materials[i].elements_conc[k];
+                    }
+                    else if (E_v >= E_c) {
+                        list_of_materials[i].Nd_Z[j][l] += (E_v / E_c) * list_of_materials[i].elements_conc[k];
+                    }
+                    //printf ("0000: %f\n", list_of_materials[i].Nd_Z[j][l]);
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
+/*=============================================================================
   Function Name : count_existing_elements
   Description   : Returns the number of ones in the provided array.
 
@@ -717,7 +907,7 @@ int convert_material_to_element (char *output_file) {
                                 index of the composition vector, which corresponds to
                                 the Z of the element. We need this for constructing the
                                 composition file. It is not part of the material structure,
-                                because it is not used for normal operation of iran3d */
+                                because it is not used for normal operation of im3d */
     char str_temp2[1024];
 
     mean_disp   = .0f;
@@ -732,13 +922,13 @@ int convert_material_to_element (char *output_file) {
     mat_elem_vector_p = (int*) malloc (MAX_NO_MATERIALS * MAX_EL_PER_MAT * sizeof (int));
     if (mat_elem_vector_p == NULL) {
         printf ("Error: insufficient memory!\n");
-        return -2016;
+        return -2019;
     }
 
-    if (single_input_file == 1) {  /* ok, create also a single output file. So we need a temporary
+    if (single_input_file == 1) {  /* OK, create also a single output file. So we need a temporary
                       element file to write to, and a temporary composition file */
-        strcpy (ElementsFileName, "temp_elementfile.iran3d");
-        strcpy (TargetCompositionFileName, "temp_compfile.iran3d");
+        strcpy (ElementsFileName, "temp_elementfile.im3d");
+        strcpy (TargetCompositionFileName, "temp_compfile.im3d");
         strcpy (ConversionFileName, output_file);
     }
     else {  /* use given output file name to put element definition to */
@@ -749,7 +939,7 @@ int convert_material_to_element (char *output_file) {
     elem_fp = fopen (ElementsFileName, "w");
     if (elem_fp == NULL) {
         printf ("Error. Cannot open file %s for writing.\n", ElementsFileName);
-        return -2017;
+        return -2020;
     }
 
     /* create element file */
@@ -791,7 +981,7 @@ int convert_material_to_element (char *output_file) {
             if (existing_elements[i] == 1) {  /* elements exists! */
                 if (((i==1)     && (hydrogen_in_target==1)) ||
                     ((i>1)      && (i != ion_Z)) ||
-                    ((i==ion_Z) && (ionZ_in_target==1))) {  /* ok, element really exists in target,
+                    ((i==ion_Z) && (ionZ_in_target==1))) {  /* OK, element really exists in target,
                                                     not just additionally added ion or hydrogen */
                     elem_count ++;
                 }
@@ -804,7 +994,7 @@ int convert_material_to_element (char *output_file) {
             if (existing_elements[i] == 1) {  /* elements exists! */
                 if (((i==1)     && (hydrogen_in_target==1)) ||
                     ((i>1)      && (i!=ion_Z)) ||
-                    ((i==ion_Z) && (ionZ_in_target==1))) {  /* ok, element really exists in target,
+                    ((i==ion_Z) && (ionZ_in_target==1))) {  /* OK, element really exists in target,
                                                     not just additionally added ion or hydrogen */
                     if (print_level > 0) printf ("Element %s found. Storing data.\n", atomic_names[i]);
                     /* Now search in which materials the element appears and obtain mean values
@@ -846,7 +1036,7 @@ int convert_material_to_element (char *output_file) {
         }
         if (print_level > -2) printf ("Finished parsing elements.\n");
            /* For now, the ion's displacement, lattice and surface energy are simply
-              determined by the last element that appeard.
+              determined by the last element that appeared.
               The values should anyway better be set by the user later! */
     }
 
@@ -857,19 +1047,19 @@ int convert_material_to_element (char *output_file) {
 
     fclose (elem_fp);
 
-    /* ok, element file has been written, new create composition file */
+    /* OK, element file has been written, new create composition file */
     if (print_level > -2) printf ("New element file has been created.\n");
 
     compVector = (float*) malloc ((elem_count + 1) * sizeof (float));
     if (compVector == NULL) {
         printf ("Error: insufficient memory!\n");
-        return -2018;
+        return -2021;
     }
 
     comp_fp = fopen (TargetCompositionFileName, "w");
     if(comp_fp==NULL) {
         printf ("Error. Cannot open file %s for writing.\n", TargetCompositionFileName);
-        return -2019;
+        return -2022;
     }
 
     if (print_level > -2)
@@ -893,12 +1083,12 @@ int convert_material_to_element (char *output_file) {
     if (print_level > -2)
         printf ("New composition file %s has been created.\n", TargetCompositionFileName);
 
-    if (single_input_file == 1) {  /* ok, create a single output file */
+    if (single_input_file == 1) {  /* OK, create a single output file */
         if (print_level > -2)
             printf ("Combining input files to create single project file %s... \n", ConversionFileName);
         sprintf (str_temp2, "ElementsFileName=%s\n\n#<<<BEGIN STRUCTUREFILE", ElementsFileName);
-        result = combine_files (9, ConversionFileName, "#<<<BEGIN CONFIGFILE", "temp_configfile.iran3d",
-                 str_temp2, "temp_structfile.iran3d", "#<<<BEGIN ELEMFILE", ElementsFileName,
+        result = combine_files (9, ConversionFileName, "#<<<BEGIN CONFIGFILE", "temp_configfile.im3d",
+                 str_temp2, "temp_structfile.im3d", "#<<<BEGIN ELEMFILE", ElementsFileName,
                  "#<<<BEGIN COMPFILE", TargetCompositionFileName);
         if (result != 0) {
             printf ("Error %i. Cannot create combined output file.\n", result);

@@ -1,7 +1,7 @@
 /******************************************************************************
   Module Name : init.h
   Module Date : 02/26/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : Contains some initialization functions.
 
@@ -23,11 +23,11 @@
 
 #include "transport.h"
 #include "fileio.h"
-#include "iran3d.h"
+#include "im3d.h"
 #include "matrix.h"
 #include "random.h"
 #include "utils.h"
-#include "index.h"
+#include "index64.h"
 #include "material.h"
 #include "target.h"
 #include "const.h"
@@ -55,7 +55,7 @@ float inverse_erf_list[MAXERFLIST];  /* list of evenly distributed but randomly 
                           values of inverse erf of -1+1/MAXERFLIST to 1-1/MAXERFLIST */
 
 unsigned int erf_list_pointer;  /* points to next erf element to use */
-unsigned int azim_angle;        /* points to next azimutal angle to choose */
+unsigned int azim_angle;        /* points to next azimuthal angle to choose */
 unsigned int ran_list;          /* points to next entry in the random list */
 unsigned int ran_log_list;      /* points to next entry in the random sqrt logarithmic list */
 

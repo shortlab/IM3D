@@ -1,12 +1,12 @@
 /******************************************************************************
   Module Name : target.c
   Module Date : 02/26/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : Contains the target-related functions, etc.
 
   Others :
-      Error codes used in this modul: between 3000 and 3999.
+      Error codes used in this modulus: between 3000 and 3999.
       Refers to iradina.
 
       Revision History:
@@ -20,7 +20,7 @@
                   target concentration array etc.
                   First, we need to read the config file about how large the
                   target is, how many cells and so on... .
-                  Then we can initialze the target arrays, and then finally read
+                  Then we can initialize the target arrays, and then finally read
                   in the composition matrix.
 
   Inputs  : char* file_name
@@ -42,7 +42,7 @@ int init_target_structure (char *file_name) {
     int i, j, result;
 #ifndef MPI_PRALLEL
     /* MPI=============================================== */
-    unsigned long int lui_temp = 0;
+    unsigned int lui_temp = 0;  /* long to int for 32-bit to 64-bit */
     /* MPI=============================================== */
 #endif
 
@@ -71,8 +71,9 @@ int init_target_structure (char *file_name) {
     /* Right hand coordinate system: x-axis vertical to target surface (point into substrate),
        y,z-axises parallel to target surface. Uniform cell is only for the special target, for
        the substrate regions outside of the target region, nonuniform cells will be used or do
-       not be counted. Or, this cell group is indepedent of the geomentry cell group, so the
+       not be counted. Or, this cell group is independent of the geometry cell group, so the
        range of this cell group can be changed arbitrarily. */
+    cell_max_xy = (int) (sqrt ((float) (cell_count_x * cell_count_x + cell_count_y * cell_count_y))) + 1;
     layer_count_yz = cell_count_y   * cell_count_z;
     cell_count     = layer_count_yz * cell_count_x;
     target_size_x  = cell_count_x   * cell_size_x;
@@ -86,7 +87,7 @@ int init_target_structure (char *file_name) {
     node_yz = node_y * node_z;
     node_count = node_x * node_yz;
 
-    /* we sometimes need a float that is one bit smaller than the targetsize itself */
+    /* we sometimes need a float that is one bit smaller than the target-size itself */
     get_float_one_bit_smaller (&target_size_x, &target_max_x);
     get_float_one_bit_smaller (&target_size_y, &target_max_y);
     get_float_one_bit_smaller (&target_size_z, &target_max_z);
@@ -120,7 +121,7 @@ int init_target_structure (char *file_name) {
     }
 #endif
 
-    /* Now that we know the size of the target we can initialze some arrays etc. */
+    /* Now that we know the size of the target we can initialize some arrays etc. */
     if (mem_usage_only == 0) {
         /* Use calloc instead of malloc for initializing to zeros */
         target_composition  = (int*) calloc (cell_count, sizeof (int));
@@ -139,6 +140,13 @@ int init_target_structure (char *file_name) {
         target_depth_total_vacancies     = (int*) calloc (cell_count_z, sizeof (int));
         target_depth_total_replacements  = (int*) calloc (cell_count_z, sizeof (int));
 
+        target_radial_implanted_ions = (int*) calloc (cell_max_xy, sizeof (int));;
+        target_radial_replacing_ions = (int*) calloc (cell_max_xy, sizeof (int));
+        target_radial_total_displacements = (int*) calloc (cell_max_xy, sizeof (int));
+        target_radial_total_interstitials = (int*) calloc (cell_max_xy, sizeof (int));
+        target_radial_total_vacancies     = (int*) calloc (cell_max_xy, sizeof (int));
+        target_radial_total_replacements  = (int*) calloc (cell_max_xy, sizeof (int));
+
         if (target_implanted_ions == NULL) return -3002;  /* cannot allocate memory */
         if (target_replacing_ions == NULL) return -3003;  /* cannot allocate memory */
         if (target_total_displacements == NULL) return -3004;  /* cannot allocate memory */
@@ -153,9 +161,16 @@ int init_target_structure (char *file_name) {
         if (target_depth_total_vacancies     == NULL) return -3012;  /* cannot allocate memory */
         if (target_depth_total_replacements  == NULL) return -3013;  /* cannot allocate memory */
 
-        if (detailed_sputtering == 1) {  /* for detailed calucation of sputtering, we need these */
+        if (target_radial_implanted_ions == NULL) return -3014;  /* cannot allocate memory */
+        if (target_radial_replacing_ions == NULL) return -3015;  /* cannot allocate memory */
+        if (target_radial_total_displacements == NULL) return -3016;  /* cannot allocate memory */
+        if (target_radial_total_interstitials == NULL) return -3017;  /* cannot allocate memory */
+        if (target_radial_total_vacancies     == NULL) return -3018;  /* cannot allocate memory */
+        if (target_radial_total_replacements  == NULL) return -3019;  /* cannot allocate memory */
+
+        if (detailed_sputtering == 1) {  /* for detailed calculation of sputtering, we need these */
             target_total_sputtered  = (int*) calloc (cell_count, sizeof(int));
-            if (target_total_sputtered  == NULL) return -3014;   /* cannot allocate */
+            if (target_total_sputtered  == NULL) return -3020;   /* cannot allocate */
         }
         if (store_energy_deposit == 1) {  /* for detailed storing of deposited energy, we need these */
             target_energy_phonons   = (double*) calloc (cell_count, sizeof (double));
@@ -164,11 +179,17 @@ int init_target_structure (char *file_name) {
             target_depth_energy_phonons   = (double*) calloc (cell_count_z, sizeof (double));
             target_depth_energy_electrons = (double*) calloc (cell_count_z, sizeof (double));
 
-            if (target_energy_phonons   == NULL) return -3015;  /* cannot allocate */
-            if (target_energy_electrons == NULL) return -3016;  /* cannot allocate */
+            target_radial_energy_phonons   = (double*) calloc (cell_max_xy, sizeof (double));
+            target_radial_energy_electrons = (double*) calloc (cell_max_xy, sizeof (double));
 
-            if (target_depth_energy_phonons   == NULL) return -3017;  /* cannot allocate */
-            if (target_depth_energy_electrons == NULL) return -3018;  /* cannot allocate */
+            if (target_energy_phonons   == NULL) return -3021;  /* cannot allocate */
+            if (target_energy_electrons == NULL) return -3022;  /* cannot allocate */
+
+            if (target_depth_energy_phonons   == NULL) return -3023;  /* cannot allocate */
+            if (target_depth_energy_electrons == NULL) return -3024;  /* cannot allocate */
+
+            if (target_radial_energy_phonons   == NULL) return -3025;  /* cannot allocate */
+            if (target_radial_energy_electrons == NULL) return -3026;  /* cannot allocate */
         }
 
         /* go through materials, init arrays for interstitials and vacancies */
@@ -192,21 +213,35 @@ int init_target_structure (char *file_name) {
             list_of_materials[i].target_depth_elemental_disp        =
                 (int**) malloc (sizeof (int*) * list_of_materials[i].element_count);
 
-            if (list_of_materials[i].target_implanted_recoils_int  == NULL) return -3019;
-            if (list_of_materials[i].target_implanted_recoils_repl == NULL) return -3020;
-            if (list_of_materials[i].target_elemental_vacancies    == NULL) return -3021;
-            if (list_of_materials[i].target_elemental_disp         == NULL) return -3022;
+            list_of_materials[i].target_radial_implanted_recoils_int  =
+                (int**) malloc (sizeof (int*) * list_of_materials[i].element_count);
+            list_of_materials[i].target_radial_implanted_recoils_repl =
+                (int**) malloc (sizeof (int*) * list_of_materials[i].element_count);
+            list_of_materials[i].target_radial_elemental_vacancies   =
+                (int**) malloc (sizeof (int*) * list_of_materials[i].element_count);
+            list_of_materials[i].target_radial_elemental_disp        =
+                (int**) malloc (sizeof (int*) * list_of_materials[i].element_count);
 
-            if (list_of_materials[i].target_depth_implanted_recoils_int  == NULL) return -3023;
-            if (list_of_materials[i].target_depth_implanted_recoils_repl == NULL) return -3024;
-            if (list_of_materials[i].target_depth_elemental_vacancies    == NULL) return -3025;
-            if (list_of_materials[i].target_depth_elemental_disp         == NULL) return -3026;
+            if (list_of_materials[i].target_implanted_recoils_int  == NULL) return -3027;
+            if (list_of_materials[i].target_implanted_recoils_repl == NULL) return -3028;
+            if (list_of_materials[i].target_elemental_vacancies    == NULL) return -3029;
+            if (list_of_materials[i].target_elemental_disp         == NULL) return -3030;
 
-            /* for detailed calucation of sputtering, we need these */
+            if (list_of_materials[i].target_depth_implanted_recoils_int  == NULL) return -3031;
+            if (list_of_materials[i].target_depth_implanted_recoils_repl == NULL) return -3032;
+            if (list_of_materials[i].target_depth_elemental_vacancies    == NULL) return -3033;
+            if (list_of_materials[i].target_depth_elemental_disp         == NULL) return -3034;
+
+            if (list_of_materials[i].target_radial_implanted_recoils_int  == NULL) return -3035;
+            if (list_of_materials[i].target_radial_implanted_recoils_repl == NULL) return -3036;
+            if (list_of_materials[i].target_radial_elemental_vacancies    == NULL) return -3037;
+            if (list_of_materials[i].target_radial_elemental_disp         == NULL) return -3038;
+
+            /* for detailed calculation of sputtering, we need these */
             if (detailed_sputtering == 1) {
                 list_of_materials[i].target_sputtered_atoms =
                     (int**) malloc (sizeof (int*) * list_of_materials[i].element_count);
-                if (list_of_materials[i].target_sputtered_atoms   == NULL) return -3027;
+                if (list_of_materials[i].target_sputtered_atoms   == NULL) return -3039;
             }
 
             /* go through elements, make arrays for each one */
@@ -229,21 +264,35 @@ int init_target_structure (char *file_name) {
                 list_of_materials[i].target_depth_elemental_disp[j]         =
                     (int*) calloc (cell_count_z, sizeof (int));
 
-                if (list_of_materials[i].target_implanted_recoils_int[j]  == NULL) return -3028;
-                if (list_of_materials[i].target_implanted_recoils_repl[j] == NULL) return -3029;
-                if (list_of_materials[i].target_elemental_vacancies[j]    == NULL) return -3030;
-                if (list_of_materials[i].target_elemental_disp[j]         == NULL) return -3031;
+                list_of_materials[i].target_radial_implanted_recoils_int[j]  =
+                    (int*) calloc (cell_max_xy, sizeof (int));
+                list_of_materials[i].target_radial_implanted_recoils_repl[j] =
+                    (int*) calloc (cell_max_xy, sizeof (int));
+                list_of_materials[i].target_radial_elemental_vacancies[j]    =
+                    (int*) calloc (cell_max_xy, sizeof (int));
+                list_of_materials[i].target_radial_elemental_disp[j]         =
+                    (int*) calloc (cell_max_xy, sizeof (int));
 
-                if (list_of_materials[i].target_depth_implanted_recoils_int[j]  == NULL) return -3032;
-                if (list_of_materials[i].target_depth_implanted_recoils_repl[j] == NULL) return -3033;
-                if (list_of_materials[i].target_depth_elemental_vacancies[j]    == NULL) return -3034;
-                if (list_of_materials[i].target_depth_elemental_disp[j]         == NULL) return -3035;
+                if (list_of_materials[i].target_implanted_recoils_int[j]  == NULL) return -3040;
+                if (list_of_materials[i].target_implanted_recoils_repl[j] == NULL) return -3041;
+                if (list_of_materials[i].target_elemental_vacancies[j]    == NULL) return -3042;
+                if (list_of_materials[i].target_elemental_disp[j]         == NULL) return -3043;
 
-                /* For detailed calucation of sputtering, we need these */
+                if (list_of_materials[i].target_depth_implanted_recoils_int[j]  == NULL) return -3044;
+                if (list_of_materials[i].target_depth_implanted_recoils_repl[j] == NULL) return -3045;
+                if (list_of_materials[i].target_depth_elemental_vacancies[j]    == NULL) return -3046;
+                if (list_of_materials[i].target_depth_elemental_disp[j]         == NULL) return -3047;
+
+                if (list_of_materials[i].target_radial_implanted_recoils_int[j]  == NULL) return -3048;
+                if (list_of_materials[i].target_radial_implanted_recoils_repl[j] == NULL) return -3049;
+                if (list_of_materials[i].target_radial_elemental_vacancies[j]    == NULL) return -3050;
+                if (list_of_materials[i].target_radial_elemental_disp[j]         == NULL) return -3051;
+
+                /* For detailed calculation of sputtering, we need these */
                 if (detailed_sputtering == 1) {
                     list_of_materials[i].target_sputtered_atoms[j] =
                         (int*) calloc (cell_count, sizeof (int));
-                    if (list_of_materials[i].target_sputtered_atoms[j]   == NULL) return -3036;
+                    if (list_of_materials[i].target_sputtered_atoms[j]   == NULL) return -3052;
 	              }
             }
         }
@@ -258,7 +307,7 @@ int init_target_structure (char *file_name) {
 
         /* switch : 0 - CSG, 1 - FETM. */
         /* now read in the target composition file */
-        /* target composition file for non-dyanmic version based on materials */
+        /* target composition file for non-dynamic version based on materials */
         switch (geometry_type) {
         case 0 :  /* multi_layer bulk geometry */
             result = read_bulk_shape (TargetCompositionFileName);  /* (1) - (8) - (2) */
@@ -269,10 +318,10 @@ int init_target_structure (char *file_name) {
             else {
 #ifdef MPI_PRALLEL
                 /* MPI=============================================== */
-                if (my_node == ROOT) printf ("This is the multi-layer bulk geometry version of iran3d.\n\n");
+                if (my_node == ROOT) printf ("This is the multi-layer bulk geometry version of im3d.\n\n");
                 /* MPI=============================================== */
 #else
-                printf ("This is the multi-layer bulk geometry version of iran3d.\n\n");  // %s, shape
+                printf ("This is the multi-layer bulk geometry version of im3d.\n\n");  // %s, shape
 #endif
             }
             break;
@@ -285,10 +334,10 @@ int init_target_structure (char *file_name) {
             else {
 #ifdef MPI_PRALLEL
                 /* MPI=============================================== */
-                if (my_node == ROOT) printf ("This is the CSG geometry version of iran3d.\n\n");
+                if (my_node == ROOT) printf ("This is the CSG geometry version of im3d.\n\n");
                 /* MPI=============================================== */
 #else
-                printf ("This is the CSG geometry version of iran3d.\n\n");  // %s, shape
+                printf ("This is the CSG geometry version of im3d.\n\n");  // %s, shape
 #endif
             }
             break;
@@ -301,10 +350,10 @@ int init_target_structure (char *file_name) {
             else {
 #ifdef MPI_PRALLEL
                 /* MPI=============================================== */
-                if (my_node == ROOT) printf ("This is the FETM geometry version of iran3d.\n\n");
+                if (my_node == ROOT) printf ("This is the FETM geometry version of im3d.\n\n");
                 /* MPI=============================================== */
 #else
-                printf ("This is the FETM geometry version of iran3d.\n\n");
+                printf ("This is the FETM geometry version of im3d.\n\n");
 #endif
             }
             break;
@@ -333,7 +382,7 @@ int init_target_structure (char *file_name) {
         /* MPI=============================================== */
         lui_temp += 7 * sizeof (int) * cell_count;
         lui_temp += sizeof (float) * cell_count;
-        if (detailed_sputtering == 1) {  /* for detailed calucation of sputtering, we need these */
+        if (detailed_sputtering == 1) {  /* for detailed calculation of sputtering, we need these */
             lui_temp += sizeof (int) * cell_count;
             lui_temp += sizeof (char) * cell_count;
         }
@@ -343,13 +392,13 @@ int init_target_structure (char *file_name) {
             for (j=0; j<list_of_materials[i].element_count; j++) {  /* go through elements,
                                                              make arrays for each one */
                 lui_temp += 4 * cell_count * sizeof (int);
-                /* for detailed calucation of sputtering, we need these */
+                /* for detailed calculation of sputtering, we need these */
                 if (detailed_sputtering == 1) lui_temp += cell_count * sizeof (int);
             }
         }
         mem_usage += lui_temp;
         if (mem_usage_details == 1)
-            printf ("MEMORY Target historgrams:          %li bytes\n", lui_temp);
+            printf ("MEMORY Target histograms:          %li bytes\n", lui_temp);
         /* MPI=============================================== */
 #endif
     }
@@ -361,7 +410,7 @@ int init_target_structure (char *file_name) {
 
 /*=============================================================================
   Function Name : read_target_structure_data_block
-  Description   : Needs to be called from the ini file reader while the traget
+  Description   : Needs to be called from the ini file reader while the target
                   structure input file is read.
 
   Inputs  :
@@ -378,7 +427,7 @@ int read_target_structure_data_block (char *block_name) {
 
 /*=============================================================================
   Function Name : read_target_structure_data
-  Description   : Needs to be called from the ini file reader while the target
+  Description   : Needs to be called from the init file reader while the target
                   structure input file is read.
 
   Inputs  :
@@ -418,7 +467,7 @@ int read_target_structure_data (char *par_name, char *par_value) {
 
 /*=============================================================================
   Function Name : target_index
-  Description   : Calcualtes index for accessing one-dimensional target arrays
+  Description   : Calculates index for accessing one-dimensional target arrays
                   knowing the integer cell coordinates.
 
   Inputs  : int x, int y, int z
@@ -533,7 +582,7 @@ void cal_relative_target_atom_position (double vx, double vy, double vz, double 
     float k, kinv;
     float k2 = 1.0f - vz * vz;
 
-    /* random azimutal rotation angle components */
+    /* random azimuthal rotation angle components */
     float cosomega = cos_azim_angle[iazim_angle];
     float sinomega = sin_azim_angle[iazim_angle];
     /* In the rotation routine, we would have to increase the azim-counter here, but

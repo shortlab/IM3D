@@ -1,7 +1,7 @@
 /******************************************************************************
   Module Name : material.h
   Module Date : 02/26/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : Contains the material-related functions, etc.
 
@@ -21,13 +21,13 @@
 #include <string.h>
 
 #include "fileio.h"
-#include "iran3d.h"
+#include "im3d.h"
 #include "transport.h"
 #include "const.h"
 #include "utils.h"
 #include "matrix.h"
 #include "target.h"
-#include "index.h"
+#include "index64.h"
 
 #ifdef MPI_PRALLEL
 /* MPI=============================================== */
@@ -52,8 +52,8 @@ struct material                 /* all properties of a material */
     float density_NM;           /* total atomic density in at/nm^3 */
     float atomic_distance;      /* average inter-atomic distance [nm] */
     float rev_atomic_distance;  /* 1.0/AtomicDistance [nm^-1], ygli */
-    float layer_distance;       /* layer distcance assuming simple cubic structure[nm] */
-    float mean_impact_par;         /* not actually the mean impact paramater but rather
+    float layer_distance;       /* layer distance assuming simple cubic structure[nm] */
+    float mean_impact_par;         /* not actually the mean impact parameter but rather
                                       1/sqrt(PI*density*MeanFreePath) */
     float sqrt_rec_fl_density;     /* 1/sqrt(pi*flight_length_constant*density) needed for
                                       constant flight lengths */
@@ -74,7 +74,8 @@ struct material                 /* all properties of a material */
     float mean_M;      /* average M, weighted by fraction */
     float mean_F;      /* average F (reduced energy conversion factor), weighted by fraction */
     float mean_A;      /* average A (screening length), weighted by fraction, */
-    float mean_min_red_transfer;  /* average minimun energy transfer in reduced units */
+    float mean_min_red_transfer;  /* average minimum energy transfer in reduced units */
+    float mean_Ed;     /* average Ed, displacement energy, Modified Kinchin-Pease Model, Aug. 05, 2014 */
 
     /* For each element of each material we want to store the recoils, interstitials and so on.
        The equations are:
@@ -94,11 +95,19 @@ struct material                 /* all properties of a material */
     int **target_depth_elemental_vacancies;
     int **target_depth_elemental_disp;
 
+    /* radial distribution statistics */
+    int **target_radial_implanted_recoils_int;
+    int **target_radial_implanted_recoils_repl;
+    int **target_radial_elemental_vacancies;
+    int **target_radial_elemental_disp;
+
     int **target_sputtered_atoms;       /* number of atoms sputtered from this cell */
     float **stopping_ZE;                /* points to an array of 92 elements (the Zs) which contain
                                            pointers to logarithmically scaled stopping tables for Z
                                            in this material.*/
     float **straggling_ZE;              /* we need the same for energy loss straggling */
+    float *Nd;                          /* Modified Kinchin-Pease Model, Aug. 05, 2014 */
+    float **Nd_Z;                       /* Modified Kinchin-Pease Model with different Z, Aug. 13, 2014 */
     struct transmitted_ion** elemental_leaving_recoils;  /* arrays storing recoils that are
                                                             leaving of each element */
     int *leaving_recoils_pointer;       /* array of pointers which for each element of this material
@@ -121,19 +130,23 @@ int ionZ_in_target;                     /* The ion is always included in the exi
 /*-----------------------------Functions-----------------------------*/
 /* read materials from input file and do preparatory calculations */
 int init_materials (char *file_name);
-/* needs to be called from the ini file reader while the materials input file is read */
+/* needs to be called from the init file reader while the materials input file is read */
 int read_materials_data_block (char *material_name);
-/* needs to be called from the ini file reader while the materials input file is read */
+/* needs to be called from the init file reader while the materials input file is read */
 int read_materials_data (char *par_name, char *par_value);
 
 /* read stopping data from file and fill arrays etc. */
 int prepare_stopping_tables (void);
 
 /* create straggling tables etc. */
-/* Note: there is a difference between the material and the elemental version of iran3d:
+/* Note: there is a difference between the material and the elemental version of im3d:
    Omega is stored in the tables in the material version.
    In contrast, Omega^2 is stored in the tables in the element version. */
 int prepare_straggling_tables (int model);
+
+/* modified Kinchin-Pease model, Material version */
+int prepare_KP_tables1 (void);
+int prepare_KP_tables2 (void);
 
 /* returns the number of ones in the provided array */
 int count_existing_elements (int *element_array);

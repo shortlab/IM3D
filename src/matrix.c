@@ -1,7 +1,7 @@
 /******************************************************************************
   Module Name : matrix.c
   Module Date : 02/26/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : Scattering matrix: sin^2(theta_CM/2).
 
@@ -17,7 +17,7 @@
 /* Scattering matrix: sin^2(theta_CM/2) */
 float matrix[DIME*DIMS];
 
-/* matrix elements calulation parameters */
+/* matrix elements calculation parameters */
 #define NSUM  1000  /* number of terms in Gauss-Mehler quadrature sum when computing the matrix */
 #define NSUM2 100   /* number of terms in Gauss-Mehler quadrature sum when evaluation the screened
                        cross-section */
@@ -135,7 +135,7 @@ double find_x0 (double epsilon, double s) {
     double func_x0_val1, func_x0_val2, func_x0_valm;
 
     double temp = 1.0 / (2.0 * epsilon);
-    /* inital guesses: Mendenhall & Weller NIMB 58(1991)11, eq. 15 */
+    /* initial guesses: Mendenhall & Weller NIMB 58(1991)11, eq. 15 */
     double x2 = temp + sqrt (temp + s * s);
     double x1 = x2 / 10.;
 
@@ -185,7 +185,7 @@ double find_x0 (double epsilon, double s) {
 double finds (double epsilon, double thetaCM) {
     double funcX0val1, funcX0val2, funcX0valm;
 
-    /* inital guesses: Mendenhall & Weller NIMB 58 (1991) 11, eqs. 23-25 */
+    /* initial guesses: Mendenhall & Weller NIMB 58 (1991) 11, eqs. 23-25 */
     double gamma = (PI - thetaCM) / PI;
     double x0 = find_x0 ((1.0 - gamma * gamma) * epsilon, MINS);
     double x1 = 0.7 * gamma * x0;
@@ -260,7 +260,7 @@ double cal_theta (double epsilon, double s, unsigned int nsum) {
       Corteo: Adapted from corteomatrix.c.
 =============================================================================*/
 int calc_matrix (unsigned int screening_type, int show_progress, char *file_name) {
-    unsigned long i, j, n_theta_err = 0;
+    unsigned int i, j, n_theta_err = 0;  /* for 32-bit to 64-bit */
     double theta, sin_theta_by_2;
     FILE *ofp;
 
@@ -341,7 +341,7 @@ int calc_matrix (unsigned int screening_type, int show_progress, char *file_name
         fflush  (stdout);
     }
 #endif
-    if (n_theta_err) fprintf (stderr, "%lu error(s) evaluating theta\n", n_theta_err);
+    if (n_theta_err) fprintf (stderr, "%i error(s) evaluating theta\n", n_theta_err);
 
     return 1;
 }
@@ -357,6 +357,7 @@ int calc_matrix (unsigned int screening_type, int show_progress, char *file_name
   Notes : no.
 =============================================================================*/
 int load_matrix (char file_name[]) {
+    int iscan;
     unsigned int i;
     FILE *ifp;
 
@@ -370,7 +371,8 @@ int load_matrix (char file_name[]) {
     }
 
     /* file exists, get header */
-    fread ((void*) header, HEADERSIZE, sizeof (float), ifp);
+    iscan = fread ((void*) header, HEADERSIZE, sizeof (float), ifp);
+    if (iscan < 0) return -1;
 
     for (i=0; i<HEADERSIZE; i++)
         if (header[i] != headerRef[i]) {
@@ -381,10 +383,12 @@ int load_matrix (char file_name[]) {
         }
 
     /* read file into matrix */
-    fread ((void*) matrix, DIME * DIMS, sizeof (float), ifp);
+    iscan = fread ((void*) matrix, DIME * DIMS, sizeof (float), ifp);
+    if (iscan < 0) return -1;
 
     /* read control data */
-    fread ((void*) (&tail), 1, sizeof (int), ifp);
+    iscan = fread ((void*) (&tail), 1, sizeof (int), ifp);
+    if (iscan < 0) return -1;
     fclose (ifp);
 
     return 1;
@@ -394,12 +398,12 @@ int load_matrix (char file_name[]) {
   Function Name : matrix_i
   Description   : Return element i of matrix.
 
-  Inputs  : unsigned long i
+  Inputs  : unsigned int i
   Outputs : no.
 
   Notes : no.
 =============================================================================*/
-float matrix_i (unsigned long i) {
+float matrix_i (unsigned int i) {  /* long to int for 32-bit to 64-bit */
     return matrix[i];
 }
 
@@ -408,13 +412,13 @@ float matrix_i (unsigned long i) {
   Description   : Set element i of matrix.
 
   Inputs  :
-            unsigned long i
+            unsigned int i
             float val
   Outputs : no.
 
   Notes : no.
 =============================================================================*/
-void set_matrix (unsigned long i, float val) {
+void set_matrix (unsigned int i, float val) {  /* long to int for 32-bit to 64-bit */
     matrix[i] = val;
 
     return;
@@ -488,11 +492,11 @@ int prepare_scattering_matrix (struct scattering_matrix *scat_matrix, float proj
       Corteo: Function adapted from corteo.c.
 
       function call:
-        fromcorteo - float matrix_i (unsigned long i);
+        fromcorteo - float matrix_i (unsigned int i);
                      float d2f (double val).
 =============================================================================*/
 void fill_cos_sin_table (float *cos_table, float *sin_table, float mr) {
-    unsigned long i;
+    unsigned int i;  /* long to int for 32-bit to 64-bit */
     double sin2_thetaby2, cos_theta, cos_theta_lab, sin_theta_lab;
 
     /* compute scattering angle components */
@@ -511,7 +515,7 @@ void fill_cos_sin_table (float *cos_table, float *sin_table, float mr) {
         cos_table[i] = d2f (cos_theta_lab);
         sin_table[i] = d2f (sin_theta_lab);
 
-        /* Modefication from Corteo for iran3d, C. Borschel 2011: */
+        /* Modefication from Corteo for im3d, C. Borschel 2011: */
         /* In some rare cases, when cos=1, then sin becomes "Not a Number".
            To prevent this, I will set the sine to 0 in those cases. */
         if (!((sin_table[i]>=-1) && (sin_table[i]<=1))) sin_table[i] = 0;

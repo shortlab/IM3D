@@ -1,7 +1,7 @@
 /***********************************************************************
   Module Name : utils.h
   Module Date : 02/26/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : Contains some auxiliary functions.
 
@@ -22,7 +22,7 @@
 #include <float.h>
 
 #include "fileio.h"
-#include "iran3d.h"
+#include "im3d.h"
 #include "transport.h"
 #include "target.h"
 
@@ -38,8 +38,15 @@
 //#include "fileio.h"
 
 /*------------------------------Defines------------------------------*/
+/* weast time and introduce errors, TODO: check!? */
 #define MIN(x,y) (x<y)?x:y
 #define MAX(x,y) (x>y)?x:y
+
+/* a = b - c */
+#define vector(a, b, c)                  \
+              (a)[0] = (b)[0] - (c)[0];  \
+              (a)[1] = (b)[1] - (c)[1];  \
+              (a)[2] = (b)[2] - (c)[2];
 
 /*--------------------------Global variables-------------------------*/
 /* if 1 then, separate elements are created for each material,
@@ -52,11 +59,11 @@ int handle_cmd_line_options (int argc, char *argv[]);
 
 int print_help_text (void);
 
-/* read comma-seprated values from string and put them into
+/* read comma-separated values from string and put them into
    the int array, which has #count entries */
 int make_int_array (char *values, int count, int *i_array);
 
-/* read comma-seprated values from string and put them into
+/* read comma-separated values from string and put them into
    the float array, which has #count entries. The float array
    must exist already */
 int make_float_array (char *values, int count, float *f_array);
@@ -76,7 +83,7 @@ void calculate_normalization_factor (int num_of_ions);
 /* get ions/target atoms leaving direction */
 int get_leaving_direction (double vx, double vy, double vz);
 
-/* creates a file, that describes iran3d's running state */
+/* creates a file, that describes im3d's running state */
 int write_status_file (char *status_text, int ion_number);
 
 /* returns the largest float that is smaller than the fltInput */
@@ -97,7 +104,7 @@ void mat_mul2 (double a[][3], double b[], double c[]);
 
 double dot_product (double a[], double b[]);
 
-void cross_product (double a[], double b [], double c[]);
+void cross_product (double a[], double b[], double c[]);
 
 int copy_int_array (int a[], int b[], int num_elements);
 

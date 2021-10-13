@@ -2,17 +2,17 @@
 
 # For Linux or UNIX systems I recommend using the gcc for compilation.
 # On Windows I recommend using mingw32.
-#CC = gcc
+CC = gcc
 #CC = mingw32-gcc
-CC = mpicc
+#CC = mpicc
 
 #CFLAGS = -O2 -Wall -ansi -pedantic
 #CFLAGS = -O2 -Wall -pedantic
 #CFLAGS = -O1 -Wall
 CFLAGS = -O1 -Wall #-m32# 32bit, -arch i386
 LDFLAGS = #-m32# -v
-#LIBFLAG = -L. -lstruct_s -lm# serial
-LIBFLAG = -L. -lstruct_m -lm# mpi
+LIBFLAG = -L. -lstruct_s -lm# serial
+#LIBFLAG = -L. -lstruct_m -lm# mpi
 
 # Notes on warning level:
 # Using -Wall and -pedantic will return many warnings, because of non-allowed
@@ -25,14 +25,10 @@ LIBFLAG = -L. -lstruct_m -lm# mpi
 # In windows, the inverse sqr tables will not work with -O2.
 # If unsure, compile all with -O1 only.
 
-objects = im3d.o mpimod.o const.o init.o material.o target.o matrix.o index64.o magic.o fileio.o cfgwriter.o mshwriter.o aivxyz.o bulk.o utils.o random.o
-
-im3d : $(objects)
-	$(CC) $(LDFLAGS) -o im3d $(objects) $(LIBFLAG)
+im3d : im3d.o const.o init.o material.o target.o matrix.o index64.o magic.o fileio.o cfgwriter.o mshwriter.o aivxyz.o bulk.o utils.o random.o
+	$(CC) $(LDFLAGS) -o im3d im3d.o const.o init.o material.o target.o matrix.o index64.o magic.o fileio.o cfgwriter.o mshwriter.o aivxyz.o bulk.o utils.o random.o $(LIBFLAG)
 
 im3d.o: im3d.h im3d.c
-
-mpimod.o: mpimod.h mpimod.c
 
 const.o: const.h const.c
 

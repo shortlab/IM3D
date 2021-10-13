@@ -1,7 +1,7 @@
 /******************************************************************************
   Module Name : mpimod.h
   Module Date : 04/22/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : MPI parallel module.
 

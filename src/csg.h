@@ -1,9 +1,9 @@
 /******************************************************************************
   Module Name : csg.h
   Module Date : 02/26/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
-  Description : Constructive solid geometry (CSG) mtehod.
+  Description : Constructive solid geometry (CSG) method.
 
   Others :
       Refers to HMLi's CSG geometry algorithm.
@@ -40,7 +40,7 @@
 //#include "random.h"
 
 /*--------------------------Global variables-------------------------*/
-float z0_max_csg;  /* the maximuum depth under which the projetile can
+float z0_max_csg;  /* the maximum depth under which the projectile can
                       be traced as in the bulk */
 
 /* shapes information */

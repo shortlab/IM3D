@@ -1,7 +1,7 @@
 /******************************************************************************
   Module Name : bulk.h
   Module Date : 04/24/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : Bulk or multi-layer samples.
 
@@ -31,13 +31,13 @@
 /*--------------------------Global variables-------------------------*/
 FILE *shape_file;  /* shape parameters input file */
 
-int max_no_layers;
-int material_of_layer[21];
-double thick_of_layer[21];
-float sect[21], sect0;
+int max_no_layers;  /* 21 -> 201 */
+int material_of_layer[201];
+double thick_of_layer[201];
+float sect[201], sect0;
 
 /*-----------------------------Functions-----------------------------*/
-/* read bulk shape parameters form Config file */
+/* read bulk shape parameters form Config.in file */
 int read_bulk_shape (char *file_name);
 
 /* free flight path of ion for bulk or multi-layer samples */

@@ -1,7 +1,7 @@
 /******************************************************************************
   Module Name : triangulate.h
   Module Date : 04/08/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : FETM geometry file generation code.
 
@@ -33,8 +33,6 @@ int file_format;  /* all list in Config.in */
 int num_of_material;
 int material_type[20];
 int num_of_data[20];
-double scaling_x, scaling_y, scaling_z;
-double trans_x, trans_y, trans_z;
 
 /* line */
 double xyz_flag;
@@ -56,7 +54,7 @@ int read_file_ply2 (int n);
 void cal_direct (double xyz[], double *sin_theta, double *cos_theta,
                  double *sin_phi, double *cos_phi);
 
-/* genetates line */
+/* generates line */
 void make_line_tri (int flag_or_not, double sin_theta, double cos_theta,
 	                double sin_phi, double cos_phi, double x, double y,
 	                double z, int *i, int *j, int *k);

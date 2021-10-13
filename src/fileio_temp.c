@@ -47,7 +47,6 @@ int read_init_file (int (*read_data_block) (char *block_name),
     int  result;        /* for storing returned values */
 
     ini_file = fopen(file_name, "rt");
-    flock ((long int) ini_file, LOCK_UN);
     if (ini_file == NULL) {
         printf ("Error: File %s cannot be opened for reading.\n", file_name);
         return -4000;
@@ -1133,6 +1132,16 @@ int split_single_input_file (char *file_name) {
     if (temp_FN == NULL) {printf ("Error. Insufficient memory!\n"); return -4017;}
     strncpy (temp_FN, ConfigFileName, 1023);
 
+#ifdef MPI_PRALLEL  /* avoiding I/O conflict in MPI*/
+    /* name of the general input config file */
+    sprintf (ConfigFileName, "./temp/temp_configfile.im3d.%i", my_node);
+    /* filename of the file that define the structure of the target */
+    sprintf (TargetStructureFileName, "./temp/temp_structfile.im3d.%i", my_node);
+    /* target composition file */
+    sprintf (TargetCompositionFileName, "./temp/temp_compfile.im3d.%i", my_node);
+    /* name of the file that defines the materials in the target */
+    sprintf (MaterialsFileName, "./temp/temp_matfile.im3d.%i", my_node);
+#else
     /* name of the general input config file */
     strcpy (ConfigFileName, "temp_configfile.im3d");
     /* filename of the file that define the structure of the target */
@@ -1141,6 +1150,7 @@ int split_single_input_file (char *file_name) {
     strcpy (TargetCompositionFileName, "temp_compfile.im3d");
     /* name of the file that defines the materials in the target */
     strcpy (MaterialsFileName, "temp_matfile.im3d");
+#endif
 
     /* remove existing temp files: */
     remove (ConfigFileName);

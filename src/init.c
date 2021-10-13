@@ -1,7 +1,7 @@
 /******************************************************************************
   Module Name : init.c
   Module Date : 02/26/2014
-  Module Auth : Yonggang Li
+  Module Auth : Yonggang Li, ygli@theory.issp.ac.cn
 
   Description : Contains some initialization functions.
 
@@ -52,7 +52,7 @@ int init_configuration (char *ConfigFileName) {
     float length, random;
 #ifndef MPI_PRALLEL
     /* MPI=============================================== */
-    long unsigned int lui_temp;
+    unsigned int lui_temp;  /* long to int for 32-bit to 64-bit */
     /* MPI=============================================== */
 #endif
     struct transmitted_ion temp;
@@ -139,10 +139,10 @@ int init_configuration (char *ConfigFileName) {
 #ifdef MPI_PRALLEL
             /* MPI=============================================== */
             if (my_node == ROOT)
-                printf ("No output file basename specified. Using: default_out/out.\n");
+                printf ("No output file base-name specified. Using: default_out/out.\n");
             /* MPI=============================================== */
 #else
-            printf ("No output file basename specified. Using: default_out/out.\n");
+            printf ("No output file base-name specified. Using: default_out/out.\n");
 #endif
             OutputFileBaseName = (char*) malloc (sizeof (char) * 18);
             strcpy (OutputFileBaseName, "default_out/out");
@@ -169,7 +169,7 @@ int init_configuration (char *ConfigFileName) {
         if (print_level >= 0) printf ("Chu's straggling data read.\n");
 #endif
 
-        /* read invserse error function list and randomize it*/
+        /* read inverse error function list and randomize it*/
         result = load_inverse_Erf ();  /* (1) - (6) */
         if (result != 0) { printf ("Error reading invser Erf() list!\n"); return result;}
 #ifdef MPI_PRALLEL
@@ -177,18 +177,18 @@ int init_configuration (char *ConfigFileName) {
         if (my_node==ROOT && print_level>=0) printf ("Invsere Erf list read.\n");
         /* MPI=============================================== */
 #else
-        if (print_level >= 0) printf ("Invsere Erf list read.\n");
+        if (print_level >= 0) printf ("Inverse Erf list read.\n");
 #endif
         randomize_list (inverse_erf_list, MAXERFLIST);
 #ifdef MPI_PRALLEL
         /* MPI=============================================== */
-        if (my_node==ROOT && print_level>=0) printf ("Invsere Erf list randomized.\n");
+        if (my_node==ROOT && print_level>=0) printf ("Inverse Erf list randomized.\n");
         /* MPI=============================================== */
 #else
-        if (print_level >= 0) printf ("Invsere Erf list randomized.\n");
+        if (print_level >= 0) printf ("Inverse Erf list randomized.\n");
 #endif
     }
-    else {  /* Esimate memory usage: */
+    else {  /* Estimate memory usage: */
 #ifndef MPI_PRALLEL
         /* MPI=============================================== */
         lui_temp = (DIME * DIMS * sizeof (float));
@@ -301,7 +301,7 @@ int init_configuration (char *ConfigFileName) {
         fromcorteo - float sqrtdf (double val).
 =============================================================================*/
 void fill_fast_sqrt_table (void) {
-    unsigned long i, j, n = 1<<16;  /* 1<<16: mantissa tables contain 65536 values */
+    unsigned int i, j, n = 1<<16;  /* 1<<16: mantissa tables contain 65536 values, long to int for 32-bit to 64-bit */
     float val;
 
     /* mantissa from 0 to 2 in 65536 steps, giving off precision! */
@@ -344,6 +344,7 @@ void fill_fast_sqrt_table (void) {
         utils - void ignore_line (FILE *ifp).
 =============================================================================*/
 int load_Chu_straggling_values () {
+    int iscan;
     FILE *fp;
     unsigned int k, l, Z;
     char temp[1000];
@@ -353,12 +354,14 @@ int load_Chu_straggling_values () {
 
     ignore_line (fp);  /* skip first line */
     for (k=0; k<92; k++) {
-        fscanf (fp, "%u", &Z);
+        iscan = fscanf (fp, "%u", &Z);
+        if (iscan < 0) return -1005;
         for (l=0; l<4; l++) {
-            fscanf (fp, "%s", temp);
+            iscan = fscanf (fp, "%s", temp);
+            if (iscan < 0) return -1006;
             chu_values[Z][l] = a2f (temp);
         }
-        if (Z != k+2) return -1005;  /* check consistency */
+        if (Z != k+2) return -1007;  /* check consistency */
     }
     fclose(fp);
 
@@ -384,23 +387,26 @@ int load_Chu_straggling_values () {
         fromcorteo - float a2f (char * s).
 =============================================================================*/
 int load_inverse_Erf () {
+    int iscan;
     unsigned int k;
     char erf_val[1000];
     FILE *ifp;
 
     ifp = fopen ("data/erfinv.dat", "r");
-    if (ifp == NULL) return -1006;
+    if (ifp == NULL) return -1008;
 
     for (k=0; k<MAXERFLIST; k++) {
-        fscanf (ifp, "%s", erf_val);
+        iscan = fscanf (ifp, "%s", erf_val);
+        if (iscan < 0) return -1009;
         inverse_erf_list[k] = a2f (erf_val);
     }
-    fscanf (ifp, "%s", erf_val);
+    iscan = fscanf (ifp, "%s", erf_val);
+    if (iscan < 0) return -1010;
     fclose (ifp);
 
     /* control value at the end should be the number of elements in the list */
     if (atoi (erf_val) != MAXERFLIST) {
-        return -1007;
+        return -1011;
     }
 
     return 0;
